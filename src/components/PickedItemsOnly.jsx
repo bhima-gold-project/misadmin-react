@@ -16,7 +16,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 const PickedItemsOnlyReport = () => {
 
-    const deliveryStatusData = useSelector((state) => state?.sliceData?.deliveryStatusData);
+    const deliveryStatusData = useSelector((state) => state?.products?.deliveryStatusData);
 
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState({});

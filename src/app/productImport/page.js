@@ -17,7 +17,7 @@ const AgGridTable = dynamic(() => import("@/components/AgGridTable"), {
 });
 
 const ProductImport = () => {
-    const selectedStylecodes = useSelector((state) => state?.sliceData?.selectedStylecodes)
+    const selectedStylecodes = useSelector((state) => state?.products?.selectedStylecodes)
 
     const [fileName, setFileName] = useState('No file choosen');
     const [excelData, setExcelData] = useState([]);

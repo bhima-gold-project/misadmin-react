@@ -14,7 +14,8 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 const ReportInTable = () => {
 
-    const dataIn = useSelector((state) => state?.sliceData?.importDataIn);
+    const dataIn = useSelector((state) => state?.products?.importDataIn);
+    console.log("dataIn", dataIn);
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState([]);
     const [styleCode, setStyleCode] = useState('')
@@ -146,6 +147,9 @@ const ReportInTable = () => {
                     }}
                     domLayout="autoHeight"
                     copyHeadersToClipboard={true}
+                      pagination={true}
+                    paginationPageSize={50}
+                    paginationPageSizeSelector={[20, 50, 100, 200]}
                 />
             </div>
             <div>

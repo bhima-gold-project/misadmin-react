@@ -1,20 +1,26 @@
 'use client'
-
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { startOfDay, endOfDay, format } from 'date-fns';
 import apiservice from '@/app/apiservices/page';
 import Card from '@/components/Card';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import { setBmcReportData } from '../../redux/bmcslice';
+
+
 
 const BmcSummary = () => {
   const today = new Date();
   const dispatch = useDispatch();
+  const router = useRouter();
+
 
   const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
   const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
 
   const [bmcSummary, setBmcSummary] = useState([])
+  const [duplicateRefno, setDuplicateRefno] = useState([])
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -35,14 +41,18 @@ const BmcSummary = () => {
     }
   }
 
-  const overalltransactions = bmcSummary?.summary?.reduce((total, item) => total + item?.TxnAmt, 0);
-  const notPushedToVurdhi = bmcSummary?.notpushed?.reduce((total, item) => total + item?.TxnAmt, 0);
-  const pushedToVurdhi = bmcSummary?.pushedtovurdhi?.reduce((total, item) => total + item?.TxnAmt, 0);
-
-
+  const fetchDuplicateRefNo = async () => {
+    try {
+      const data = await apiservice?.getDuplicateRefNo(fromDate, toDate);
+      setDuplicateRefno(data)
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
 
   useEffect(() => {
     fetchBmcSummary()
+    fetchDuplicateRefNo()
   }, [fromDate, toDate])
 
   return (
@@ -77,22 +87,48 @@ const BmcSummary = () => {
         <div>
           <Card
             title="Overall Transactions"
-            amount={overalltransactions}
-            onView={() => {toast.info('Feature not implemented yet !') }}
+            amount={bmcSummary?.summary?.TxnAmt}
+            onView={() => {
+              router.push(
+                `/bmc/${encodeURIComponent('Overall Transactions')}?filterType=overalltxn&fromDate=${fromDate}&toDate=${toDate}`
+              );
+            }}
           />
         </div>
+
         <div>
           <Card
             title="Pushed To Vurdhi"
-            amount={pushedToVurdhi}
-             onView={() => {toast.info('Feature not implemented yet !') }}
+            amount={bmcSummary?.pushedtovurdhi?.TxnAmt}
+            onView={() => {
+              router.push(
+                `/bmc/${encodeURIComponent('Pushed To Vurdhi')}?filterType=pushedtovurdhi&fromDate=${fromDate}&toDate=${toDate}`
+              );
+            }}
           />
         </div>
+
         <div>
           <Card
             title="Not Pushed To Vurdhi"
-            amount={notPushedToVurdhi}
-             onView={() => {toast.info('Feature not implemented yet !') }}
+            amount={duplicateRefno?.notpushed?.TxnAmt}
+            onView={() => {
+              router.push(
+                `/bmc/${encodeURIComponent('Not Pushed To Vurdhi')}?filterType=notpushedtovurdhi&fromDate=${fromDate}&toDate=${toDate}`
+              );
+            }}
+          />
+        </div>
+
+        <div>
+          <Card
+            title="Duplicate Records"
+            amount={duplicateRefno?.duplicateRefno?.TxnAmt}
+            onView={() => {
+              router.push(
+                `/bmc/${encodeURIComponent('Duplicate Records')}?filterType=duplicatePayment&fromDate=${fromDate}&toDate=${toDate}`
+              );
+            }}
           />
         </div>
       </div>

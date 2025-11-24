@@ -15,7 +15,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 const ShipmentStatusReport = () => {
 
-    const shipmentStatusData = useSelector((state) => state?.sliceData?.deliveryStatusData);
+    const shipmentStatusData = useSelector((state) => state?.products?.deliveryStatusData);
 
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState({});
@@ -197,6 +197,9 @@ const ShipmentStatusReport = () => {
                     }}
                     domLayout="autoHeight"
                     copyHeadersToClipboard={true}
+                    pagination={true}
+                    paginationPageSize={20}
+                    paginationPageSizeSelector={[20, 50, 100, 200]}
                 />
             </div>
             <div>

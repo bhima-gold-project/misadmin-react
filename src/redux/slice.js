@@ -1,12 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
 const initialState = {
   selectedStylecodes: [],
   importDataIn: [],
   importDataSg: [],
   deliveryStatusData: [],
-
 };
 
 const sliceData = createSlice({
@@ -25,7 +23,6 @@ const sliceData = createSlice({
     setDeliveryStatusData: (state, action) => {
       state.deliveryStatusData = action.payload;
     },
-
   },
 });
 

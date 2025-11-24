@@ -8,7 +8,7 @@ import { startOfDay, endOfDay, format, parseISO } from "date-fns";
 
 const DateRangePickerPopup = () => {
   const dispatch = useDispatch();
-  const { startDate, endDate } = useSelector((state) => state.sliceData);
+  const { startDate, endDate } = useSelector((state) => state);
 
   // Initialize local state from Redux or today
   const today = new Date();

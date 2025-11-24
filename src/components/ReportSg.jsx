@@ -16,7 +16,7 @@ const ReportSgTable = () => {
 
     const gridRef = useRef();
 
-    const dataSg = useSelector((state) => state?.sliceData?.importDataSg);
+    const dataSg = useSelector((state) => state?.products?.importDataSg);
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState([]);
     const [styleCode, setStyleCode] = useState('')
@@ -149,6 +149,9 @@ const ReportSgTable = () => {
                     }}
                     domLayout="autoHeight"
                     copyHeadersToClipboard={true}
+                      pagination={true}
+                    paginationPageSize={50}
+                    paginationPageSizeSelector={[20, 50, 100, 200]}
                 />
             </div>
             <div>
