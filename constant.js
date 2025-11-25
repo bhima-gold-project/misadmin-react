@@ -1,5 +1,5 @@
 /////////////////STAGING CONSTANTS/////////////////////
-// export const BASE_URL = 'https://bgadmin.bhimagold.com'
+// export const BASE_URL = 'http://localhost:3000'
 // export const PRODUCT_URL = 'https://staging.bhimagold.com/products/' 
 // export const PRODUCT_URL_SG = 'https://staging.bhimagold.com/en-SG/products/'
 // export const SEQUEL_TRACK = 'https://sequel247.com/track/'
