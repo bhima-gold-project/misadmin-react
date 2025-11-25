@@ -7,11 +7,9 @@ export default async function ProtectedLayout({ children }) {
   try {
     // Read secure httpOnly cookie on server
     const token = cookies().get("token")?.value;
-
-    if (!token) {
-      redirect("/login");
-    }
-    
+    // if (!token) {
+    //   redirect("/login");
+    // }
     const response = await axios.get(
       `${BASE_URL}/api/users/getuserdetails`,
       {

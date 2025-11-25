@@ -8,7 +8,7 @@
 
 ///////////////PRODUCTION CONSTANTS/////////////////////
 
-export const BASE_URL = 'https://bgadminapis.bhimagold.com/'
+export const BASE_URL = 'https://bgadminapis.bhimagold.com'
 export const PRODUCT_URL = 'https://www.bhimagold.com/products/' 
 export const PRODUCT_URL_SG = 'https://www.bhimagold.com/en-SG/products/'
 export const SEQUEL_TRACK = 'https://sequel247.com/track/'
