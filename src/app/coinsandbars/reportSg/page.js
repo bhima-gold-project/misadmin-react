@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { startOfDay, endOfDay, format } from 'date-fns';
 import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
-import { BASE_URL } from '../../../../../constant';
+import { BASE_URL } from '../../../../constant';
 import dynamic from "next/dynamic";
 
 const ReportSgTable = dynamic(() => import("@/components/ReportSg"), {

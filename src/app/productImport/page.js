@@ -2,7 +2,7 @@
 import * as XLSX from 'xlsx';
 import React, { useState } from 'react'
 import axios from 'axios';
-import { BASE_URL } from '../../../../constant';
+import { BASE_URL } from '../../../constant';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { RingLoader } from 'react-spinners';

@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { startOfDay, endOfDay, format } from 'date-fns';
 import { CiSearch } from "react-icons/ci";
-import { BASE_URL } from '../../../../../constant';
-import { setImportedDataIn } from '../../../../redux/slice';
+import { BASE_URL } from '../../../../constant';
+import { setImportedDataIn } from '../../../redux/slice';
 import axios from 'axios';
 import dynamic from "next/dynamic";
 

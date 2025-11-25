@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { startOfDay, endOfDay, format } from 'date-fns';
 import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
-import { BASE_URL } from '../../../../../constant';
-import { setDeliveryStatusData } from '../../../../redux/slice';
+import { BASE_URL } from '../../../../constant';
+import { setDeliveryStatusData } from '../../../redux/slice';
 import { useDispatch } from 'react-redux';
 import ShipmentStatusReport from '@/components/ShipmentStatusReport';
 
