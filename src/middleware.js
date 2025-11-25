@@ -7,14 +7,15 @@ export function middleware(req) {
     "/",
     "/productImport/reportIn",
     "/productImport/reportSg",
-    "/orders/shipmentStatusReport"
+    "/orders/shipmentStatusReport",
+    "/bmc"
   ];
 
   const path = req.nextUrl.pathname;
 
-  // if (protectedRoutes.includes(path) && !token) {
-  //   return NextResponse.redirect(new URL("/login", req.url));
-  // }
+  if (protectedRoutes.includes(path) && !token) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 
   return NextResponse.next();
 }
@@ -25,6 +26,7 @@ export const config = {
     "/",
     "/productImport/reportIn",
     "/productImport/reportSg",
-    "/orders/shipmentStatusReport"
+    "/orders/shipmentStatusReport",
+     "/bmc"
   ]
 };
