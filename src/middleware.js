@@ -12,9 +12,9 @@ export function middleware(req) {
 
   const path = req.nextUrl.pathname;
 
-  // if (protectedRoutes.includes(path) && !token) {
-  //   return NextResponse.redirect(new URL("/login", req.url));
-  // }
+  if (protectedRoutes.includes(path) && !token) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 
   return NextResponse.next();
 }
