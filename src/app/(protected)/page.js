@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import Image from "next/image";
-import bhima_boy from '../../public/bhima_boy.png';
+import bhima_boy from '../../../public/bhima_boy.png';
 
 axios.defaults.withCredentials = true
 

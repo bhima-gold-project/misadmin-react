@@ -1,12 +1,11 @@
 "use client";
-import Cookies from "js-cookie";
 import axios from "axios";
 import { BASE_URL } from "../../../../constant";
 
 
 const getBmcSummary = async (fromDate,toDate) => {
     try {
-         const token = Cookies.get("token");
+         const token = localStorage.getItem('token')
         const response = await axios.post(`${BASE_URL}/api/bmcReport?fromDate=${fromDate}&toDate=${toDate}`,{},
         {
           headers: {
@@ -23,7 +22,7 @@ const getBmcSummary = async (fromDate,toDate) => {
 
 const getDuplicateRefNo = async (fromDate,toDate) => {
     try {
-         const token = Cookies.get("token");
+        const token = localStorage.getItem('token')
         const response = await axios.post(`${BASE_URL}/api/duplicateRefNo?fromDate=${fromDate}&toDate=${toDate}`,{},
         {
           headers: {
@@ -40,7 +39,7 @@ const getDuplicateRefNo = async (fromDate,toDate) => {
 
 const getBmcReportDetails = async (filterType,fromDate,toDate) => {
     try {
-         const token = Cookies.get("token");
+         const token = localStorage.getItem('token')
         const response = await axios.post(`${BASE_URL}/api/bmcReportdetails?fromDate=${fromDate}&toDate=${toDate}&filterType=${filterType}`,{},
         {
           headers: {

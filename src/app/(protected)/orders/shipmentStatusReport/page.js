@@ -4,12 +4,10 @@ import React, { useEffect, useState } from 'react'
 import { startOfDay, endOfDay, format } from 'date-fns';
 import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
-import { BASE_URL } from '../../../../constant';
-import { setDeliveryStatusData } from '../../../redux/slice';
+import { BASE_URL } from '../../../../../constant';
+import { setDeliveryStatusData } from '../../../../redux/slice';
 import { useDispatch } from 'react-redux';
 import ShipmentStatusReport from '@/components/ShipmentStatusReport';
-import Cookies from 'js-cookie';
-
 
 const ShipmentStatus = () => {
     const today = new Date();
@@ -31,7 +29,7 @@ const ShipmentStatus = () => {
 
     const getShipmentStatus = async () => {
         try {
-            const token = Cookies.get("token");
+             const token = localStorage.getItem('token')
             const response = await axios.get(`${BASE_URL}/api/shipmentStatus?fromDate=${fromDate}&toDate=${toDate}`,
                 {
                     headers: {
@@ -49,7 +47,7 @@ const ShipmentStatus = () => {
 
     const search = async () => {
         if (searchTerm === '') return;
-        const token = Cookies.get("token");
+         const token = localStorage.getItem('token')
         try {
             const response = await axios.get(`${BASE_URL}/api/searchStatus?search=${searchTerm}`,
                 {

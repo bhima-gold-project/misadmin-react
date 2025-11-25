@@ -5,9 +5,8 @@ import { useDispatch } from 'react-redux';
 import { startOfDay, endOfDay, format } from 'date-fns';
 import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
-import { BASE_URL } from '../../../../constant';
+import { BASE_URL } from '../../../../../constant';
 import dynamic from "next/dynamic";
-import Cookies from 'js-cookie';
 
 const ReportSgTable = dynamic(() => import("@/components/ReportSg"), {
   ssr: false,
@@ -33,7 +32,7 @@ const CoinsReportSg = () => {
 
   const getReportsSg = async () => {
     try {
-    const token = Cookies.get("token");
+  const token = localStorage.getItem('token')
     const response = await axios.get(`${BASE_URL}/api/importedCoins?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}`,  {
           headers: {
             Authorization: `Bearer ${token}`,   
@@ -53,7 +52,7 @@ const CoinsReportSg = () => {
         getReportsSg()
         return
       }
-       const token = Cookies.get("token");
+        const token = localStorage.getItem('token')
       const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-SG`,  {
           headers: {
             Authorization: `Bearer ${token}`,   

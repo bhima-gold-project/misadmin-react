@@ -2,7 +2,7 @@
 import * as XLSX from 'xlsx';
 import React, { useState } from 'react'
 import axios from 'axios';
-import { BASE_URL } from '../../../constant';
+import { BASE_URL } from '../../../../constant';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { RingLoader } from 'react-spinners';
@@ -10,7 +10,6 @@ import { FaFileCsv } from "react-icons/fa";
 import { SiTicktick } from "react-icons/si";
 import { CiSearch } from "react-icons/ci";
 import dynamic from "next/dynamic";
-import Cookies from "js-cookie";
 
 const AgGridTable = dynamic(() => import("@/components/AgGridTable"), {
     ssr: false,
@@ -61,7 +60,7 @@ const ProductImport = () => {
             return toast.warn('Please upload a CSV file.');
         }
         setLoadExcel(true)
-        const token = Cookies.get("token");
+     const token = localStorage.getItem('token')
         try {
             const response = await axios.post(`${BASE_URL}/api/getStylecodeImages`,
                 { stylecodes: excelData },
@@ -89,7 +88,7 @@ const ProductImport = () => {
             return toast.error('Stylecodes not selected !');
         }
         setLoadImport(true)
-        const token = Cookies.get("token");
+          const token = localStorage.getItem('token')
         try {
             const response = await axios.post(`${BASE_URL}/api/importStylecode`,
                  { jsonPayload: selectedStylecodes },
@@ -123,7 +122,7 @@ const ProductImport = () => {
             if (!searchTerm) {
                 return toast.error('Please enter the value..');
             }
-            const token = Cookies.get("token");
+           const token = localStorage.getItem('token')
             const result = await axios.get(`${BASE_URL}/api/searchstylecodeCsv?search=${searchTerm}`,{
                     headers: {
                         Authorization: `Bearer ${token}`,

@@ -3,25 +3,22 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { startOfDay, endOfDay, format } from 'date-fns';
 import { CiSearch } from "react-icons/ci";
-import { BASE_URL } from '../../../../constant';
-import { setImportedDataIn } from '../../../redux/slice';
+import { BASE_URL } from '../../../../../constant';
+import { setImportedDataIn } from '../../../../redux/slice';
 import axios from 'axios';
 import dynamic from "next/dynamic";
-import Cookies from 'js-cookie';
 
 const ReportInTable = dynamic(() => import("@/components/ReportIn"), {
   ssr: false,
 });
 
-const ReportIn = () => {
-
+const CoinsReportIn = () => {
   const today = new Date();
   const dispatch = useDispatch();
 
   const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
   const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
   const [searchTerm, setSearchTerm] = useState('')
-
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -35,8 +32,8 @@ const ReportIn = () => {
 
   const getReportsIn = async () => {
     try {
-      const token = Cookies.get("token");
-      const response = await axios.get(`${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}`,
+       const token = localStorage.getItem('token')
+      const response = await axios.get(`${BASE_URL}/api/importedCoins?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -57,11 +54,11 @@ const ReportIn = () => {
         getReportsIn()
         return
       }
-      const token = Cookies.get("token");
+     const token = localStorage.getItem('token')
       const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-IN`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,   
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
           }
         }
@@ -77,10 +74,9 @@ const ReportIn = () => {
     getReportsIn()
   }, [fromDate, toDate]);
 
-
   return (
     <div className="min-h-screen">
-      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Report-IN</h1>
+      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Coins Report-IN</h1>
 
       <div className='flex lg:flex-row flex-col lg:items-center lg:justify-between gap-x-4'>
         <div className="flex gap-4 items-center ">
@@ -133,4 +129,4 @@ const ReportIn = () => {
   )
 }
 
-export default ReportIn
+export default CoinsReportIn

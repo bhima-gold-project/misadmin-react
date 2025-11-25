@@ -5,9 +5,9 @@ import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import axios from 'axios';
 import Modal from '@/components/ReactModal';
 import ModalDetailsTable from '@/components/ModalTableData';
-import { BASE_URL } from '../../../../constant';
+import { BASE_URL } from '../../../../../constant';
 import { useParams, useSearchParams } from 'next/navigation';
-import apiservice from '../../apiservices/bmcServices/page';
+import apiservice from '../../../apiservices/bmcServices/page';
 
 
 ModuleRegistry.registerModules([AllCommunityModule]);

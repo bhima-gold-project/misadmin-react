@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import Modal from './ReactModal';
 import axios from 'axios';
 import ModalDetailsTable from './ModalTableData';
-import Cookies from 'js-cookie';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -78,7 +77,7 @@ const ReportInTable = () => {
                 Stylecode: data?.StyleCode,
                 sku: data?.sku,
             }
-            const token = Cookies.get("token");
+            const token = localStorage.getItem('token');
             const response = await axios.post(`${BASE_URL}/api/checkstylecodeimport`, payload, {
                 headers: {
                     Authorization: `Bearer ${token}`,

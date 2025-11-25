@@ -9,7 +9,6 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { AiOutlineLogout } from "react-icons/ai";
 import { toast } from "react-toastify";
-import Cookies from "js-cookie";
 
 export default function Sidebar() {
   const [openMenus, setOpenMenus] = useState({});
@@ -102,7 +101,7 @@ export default function Sidebar() {
     try {
       const response = await axios.post(`${BASE_URL}/api/users/mis-logout`);
       if (response?.data?.success) {
-        Cookies.remove('mis_token')
+        localStorage.removeItem('token')
         toast.success(response?.data?.message);
         router.push("/login");
       }

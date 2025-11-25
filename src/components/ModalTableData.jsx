@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import { BASE_URL, PRODUCT_IMAGE_URL } from "../../constant";
 import axios from "axios";
 import { useState } from "react";
-import Cookies from "js-cookie";
 
 export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, StyleCode }) {
 
@@ -15,7 +14,7 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
     };
 
     const reImportStylecode = async () => {
-         const token = Cookies.get("token");
+          const token = localStorage.getItem('token')
         try {
             const response = await axios.post(`${BASE_URL}/api/re_importStylecode`, {
                 Stylecode: StyleCode,
@@ -42,7 +41,7 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
     }
 
     const ViewImages = async () => {
-        const token = Cookies.get("token");
+        const token = localStorage.getItem('token')
         try {
             const response = await axios.post(`${BASE_URL}/api/getProductImages`, {
                 Stylecode: StyleCode
