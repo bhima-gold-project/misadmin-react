@@ -15,7 +15,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const ReportInTable = () => {
 
     const dataIn = useSelector((state) => state?.products?.importDataIn);
-    console.log("dataIn", dataIn);
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState([]);
     const [styleCode, setStyleCode] = useState('')

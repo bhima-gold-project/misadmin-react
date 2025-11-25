@@ -78,7 +78,6 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
                         <th className="px-4 py-2 border">Product Pushed</th>
                         {isNotNumber ? '' : <th className="px-4 py-2 border">Order No</th>}
                         {isNotNumber ? '' : <th className="px-4 py-2 border">Sold Flag</th>}
-                        <th className="px-4 py-2 border">Is Lock</th>
                         <th className="px-4 py-2 border">Is Stock</th>
                         <th className="px-4 py-2 border">Branch Code</th>
                     </tr>
@@ -106,7 +105,6 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
                             <td className="px-4 py-2 border capitalize">{item?.productpushed}</td>
                             {isNotNumber ? '' : <td className="px-4 py-2 border capitalize">{item?.order_no}</td>}
                             {isNotNumber ? '' : <td className="px-4 py-2 border capitalize">{item?.sold_flag}</td>}
-                            <td className="px-4 py-2 border">{item?.islock}</td>
                             <td className="px-4 py-2 border">{item?.isstock}</td>
                             <td className="px-4 py-2 border">{item?.branch_code}</td>
 

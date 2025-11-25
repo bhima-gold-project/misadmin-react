@@ -124,3 +124,15 @@ body {
   background-color: #e2d4d3 !important;
   color: white !important;
 }
+
+@media (max-width: 600px) {
+  .ag-paging-page-size {
+    display: none !important;
+  }
+    .ag-paging-row-summary-panel {
+    display: none !important;
+  }
+  .ag-paging-page-summary-panel{
+    gap: 0 !important;
+  }
+}

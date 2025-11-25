@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { startOfDay, endOfDay, format } from 'date-fns';
-import apiservice from '@/app/apiservices/page';
+import apiservice from '@/app/apiservices/bmcServices/page';
 import Card from '@/components/Card';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';

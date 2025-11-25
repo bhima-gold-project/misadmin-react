@@ -29,6 +29,13 @@ function MobileBottomMenu() {
       ],
     },
     {
+      title: "Coins & Bars",
+      children: [
+        { title: "Import Report IN", path: "/coinsandbars/reportIn" },
+        { title: "Import Report SG", path: "/coinsandbars/reportSg" },
+      ],
+    },
+    {
       title: "Order Reports",
       children: [
         { title: "Shipment Status Report", path: "/orders/shipmentStatusReport" },
@@ -36,7 +43,7 @@ function MobileBottomMenu() {
     },
   ];
 
-   const LogOut = async () => {
+  const LogOut = async () => {
     try {
 
       const response = await axios.post(`${BASE_URL}/api/logout`);

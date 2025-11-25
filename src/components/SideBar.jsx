@@ -46,7 +46,7 @@ export default function Sidebar() {
         { title: "Shipment Status Report", path: "/orders/shipmentStatusReport" },
       ],
     },
-      {
+    {
       title: "BMC Reports",
       children: [
         { title: "Bmc Summary", path: "/bmc" },
@@ -112,19 +112,25 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="h-full w-full bg-[#8a5a20] text-white shadow-lg p-4">
-      <div className=" flex items-center justify-between mb-5 border-b border-white pb-2">
-        <div className="text-2xl font-bold">MIS ADMIN</div>
-        <div
-          className="px-3 py-2 rounded-md hover:bg-gray-800 cursor-pointer"
-          onClick={LogOut}
-        >
-          <AiOutlineLogout size={25}  />
-
-        </div>
+    <aside className="h-full w-full bg-[#8a5a20] text-white shadow-lg p-4 flex flex-col">
+      <div className="flex items-center justify-between mb-5 ">
+        <div className="lg:text-2xl text-lg font-bold">MIS ADMIN</div>
       </div>
 
-      {renderMenu(menuItems)}
+      {/* Menu items */}
+      <div className="flex-1">
+        {renderMenu(menuItems)}
+      </div>
+
+      {/* Logout button at bottom */}
+      <div
+        className="px-3 py-2 rounded-md hover:bg-gray-800 cursor-pointer mt-auto flex items-center gap-2"
+        onClick={LogOut}
+      >
+        <AiOutlineLogout size={25} />
+        <span>Logout</span>
+      </div>
     </aside>
+    
   );
 }

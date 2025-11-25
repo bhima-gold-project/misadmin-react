@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import axios from "axios";
-import { BASE_URL } from "../../../constant";
+import { BASE_URL } from "../../../../constant";
 
 
 const getBmcSummary = async (fromDate,toDate) => {

@@ -7,7 +7,7 @@ import Modal from '@/components/ReactModal';
 import ModalDetailsTable from '@/components/ModalTableData';
 import { BASE_URL } from '../../../../constant';
 import { useParams, useSearchParams } from 'next/navigation';
-import apiservice from '../../apiservices/page';
+import apiservice from '../../apiservices/bmcServices/page';
 
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -19,9 +19,9 @@ const BmcAgGridTable = () => {
   const paramsValue = {
     filterType: search.get("filterType"),
     fromDate: search.get("fromDate"),
-    toDate: search.get("toDate"), 
+    toDate: search.get("toDate"),
   }
-  const [bmcReports,setBmcReports] = useState([])
+  const [bmcReports, setBmcReports] = useState([])
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState([]);
   const [styleCode, setStyleCode] = useState('')
@@ -57,36 +57,12 @@ const BmcAgGridTable = () => {
     //   headerClass: 'ag-left-aligned-header',
     //   cellRenderer: (params) => (
     //     <p onClick={() => {
-    //       //checkStylecodeData(params?.data)
     //       openModal()
-    //     }} className="w-fit bg-gradient-to-r from-[#614119] via-[#d4af37] to-[#614119] cursor-pointer text-center text-white px-2 rounded-sm ">Check</p>
+    //     }} className="w-fit bg-gradient-to-r from-[#614119] via-[#d4af37] to-[#614119] cursor-pointer text-center text-white px-2 rounded-sm ">View</p>
     //   ),
-
     // }
   ]);
 
-
-  // const checkStylecodeData = async (data) => {
-  //     try {
-  //         setStyleCode(data?.StyleCode)
-
-  //         const payload = {
-  //             Stylecode: data?.StyleCode,
-  //             sku: data?.sku,
-  //         }
-  //         const token = Cookies.get("token");
-  //         const response = await axios.post(`${BASE_URL}/api/checkstylecodeimport`, payload, {
-  //             headers: {
-  //                 Authorization: `Bearer ${token}`,
-  //                 "Content-Type": "application/json"
-  //             }
-  //         });
-  //         const result = await response?.data?.data;
-  //         setModalData(result)
-  //     } catch (err) {
-  //         throw new Error(err)
-  //     }
-  // }
 
   const ExportExcel = async () => {
     try {
@@ -112,19 +88,19 @@ const BmcAgGridTable = () => {
     }
   };
 
-   
-  const fetchAllBmcData = async() => {
-    try{
-       const data = await apiservice?.getBmcReportDetails(paramsValue?.filterType,paramsValue?.fromDate,paramsValue?.toDate);
-       setBmcReports(data?.result)
-    }catch(err){
+
+  const fetchAllBmcData = async () => {
+    try {
+      const data = await apiservice?.getBmcReportDetails(paramsValue?.filterType, paramsValue?.fromDate, paramsValue?.toDate);
+      setBmcReports(data?.result)
+    } catch (err) {
       throw new Error(err)
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchAllBmcData()
-  },[search])
+  }, [search])
 
   return (
     <div className="ag-theme-alpine w-full overflow-x-auto" >
@@ -165,7 +141,7 @@ const BmcAgGridTable = () => {
           <Modal onClose={closeModal}>
             <p className='text-center font-bold border-b-1 pb-2 '>Summary</p>
             <div className="overflow-x-auto mt-4 mb-2 text-black">
-              <ModalDetailsTable modalData={modalData} LocaleIN={1} LocaleSG={0} StyleCode={styleCode} />
+
             </div>
           </Modal>
         )}
