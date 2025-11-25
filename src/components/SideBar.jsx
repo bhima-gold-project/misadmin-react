@@ -99,7 +99,7 @@ export default function Sidebar() {
 
   const LogOut = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/users/mis-logout`);
+      const response = await axios.post(`${BASE_URL}/api/users/mis-logout`,{},{ withCredentials: true });
       if (response?.data?.success) {
         localStorage.removeItem('token')
         toast.success(response?.data?.message);
