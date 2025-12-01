@@ -34,7 +34,7 @@ const Login = () => {
       const response = await axios.post(`${BASE_URL}/api/users/mis-login`, loginPayload, { withCredentials: true });
       const result = await response?.data;
       if (result?.success === true) {
-        localStorage.setItem('token',result?.data?.token)
+        localStorage.setItem('token', result?.data?.token)
         toast.success(result?.message);
         router.push('/');
       } else {
@@ -62,7 +62,14 @@ const Login = () => {
         <p className='text-center text-base lg:text-xl '>The clear insights your business needs to achieve true brilliance.</p>
       </div>
       <div className='flex justify-center col-span-2 gap-y-6' >
-        <form onSubmit={handleSubmit(onSubmit)} className="bg-white/90 grid gap-y-6 p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.2)] border border-[#d4af37] m-4 w-full max-w-md" >
+        <form onSubmit={handleSubmit(onSubmit)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();            
+              handleSubmit(onSubmit)();     
+            }
+          }}
+          className="bg-white/90 grid gap-y-6 p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.2)] border border-[#d4af37] m-4 w-full max-w-md" >
           <div className="w-full flex justify-center items-center mb-4">
             <Image
               src={bhima_logo}
@@ -119,7 +126,7 @@ const Login = () => {
             <button
               type="submit"
               className="w-full bg-gradient-to-r from-[#614119] via-[#d4af37] to-[#614119] cursor-pointer
-               text-white py-2 rounded-[0.7rem] mt-4 hover:opacity-90 transition-opacity duration-200 flex justify-center items-center gap-2"
+               text-white py-2 rounded-[0.5rem] mt-4 hover:opacity-90 transition-opacity duration-200 flex justify-center items-center gap-2"
             >
               <RiLoginCircleLine />  Login
             </button>

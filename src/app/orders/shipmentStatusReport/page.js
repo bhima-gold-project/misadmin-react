@@ -16,6 +16,7 @@ const ShipmentStatus = () => {
     const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
     const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
     const [searchTerm, setSearchTerm] = useState('')
+    const [searchOder, setSearchOder] = useState('')
 
     const handleStartChange = (e) => {
         const selected = startOfDay(new Date(e.target.value));
@@ -49,7 +50,7 @@ const ShipmentStatus = () => {
         if (searchTerm === '') return;
          const token = localStorage.getItem('token')
         try {
-            const response = await axios.get(`${BASE_URL}/api/searchStatus?search=${searchTerm}`,
+            const response = await axios.get(`${BASE_URL}/api/searchStatus?search=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -64,6 +65,24 @@ const ShipmentStatus = () => {
         }
     }
 
+        const searchOders = async () => {
+        if (searchOder === '') return;
+         const token = localStorage.getItem('token')
+        try {
+            const response = await axios.get(`${BASE_URL}/api/search?search=${searchOder}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+            const result = await response?.data?.data
+            dispatch(setDeliveryStatusData(result))
+        } catch (err) {
+            throw new Error(err)
+        }
+    }
 
     useEffect(() => {
         getShipmentStatus()
@@ -78,7 +97,7 @@ const ShipmentStatus = () => {
         <div className="min-h-screen">
             <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Shipment Status Report</h1>
 
-            <div className='flex lg:flex-row flex-col  items-center justify-between gap-x-4'>
+            <div className='flex lg:flex-row flex-col  lg:items-center justify-between gap-x-4'>
 
                 <div className="flex gap-4 items-center ">
                     <div className=" max-w-[300px] w-full">
@@ -129,18 +148,17 @@ const ShipmentStatus = () => {
                         <div className='flex flex-row justify-end items-center gap-2 w-full '>
                             <div className='w-full'>
                                 <input type="search" placeholder='Aw no | Order no...' onChange={(e) => {
-                                    setSearchTerm(e.target.value)
+                                    setSearchOder(e.target.value)
                                     if (e.target.value === '') {
                                         getShipmentStatus()
                                     }
                                 }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
                             </div>
-                            <div className='bg-[#b8860b] hidden lg:block p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => search()}> <CiSearch color='white' size={24} /></div>
+                            <div className='bg-[#b8860b] hidden lg:block p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => searchOders()}> <CiSearch color='white' size={24} /></div>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div>
                 <ShipmentStatusReport />
             </div>

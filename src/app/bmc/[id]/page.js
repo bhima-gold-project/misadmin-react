@@ -8,6 +8,10 @@ import ModalDetailsTable from '@/components/ModalTableData';
 import { useParams, useSearchParams } from 'next/navigation';
 import apiservice from '../../apiservices/bmcServices/page';
 import { BASE_URL } from '../../../../constant';
+import { format } from 'date-fns';
+import { CiSearch } from 'react-icons/ci';
+import { toast } from 'react-toastify';
+import { RingLoader } from 'react-spinners';
 
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -22,17 +26,11 @@ const BmcAgGridTable = () => {
     toDate: search.get("toDate"),
   }
   const [bmcReports, setBmcReports] = useState([])
-  const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState([]);
-  const [styleCode, setStyleCode] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const gridRef = useRef();
 
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
-
-
-  const [colDefs] = useState([
-    // { field: "PortalTxnID", headerName: "PortalTxnID", flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
+  const colDefs = [
     {
       field: "ReferenceNumber", headerName: 'ReferenceNumber', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
       cellRenderer: (params) => {
@@ -43,27 +41,26 @@ const BmcAgGridTable = () => {
     },
     { field: "MobileNo", headerName: 'MobileNo', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
     { field: "TxnAmt", headerName: 'TxnAmt', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
-    { field: "ProviderDate", headerName: 'ProviderDate', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
+    {
+      field: "ProviderDate", headerName: 'ProviderDate', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
+      cellRenderer: (params) => {
+        return (<>
+          {
+            params.value && params.value != 'null' ? <p>{format(params?.value, "yyyy-MM-dd HH:mm")}</p> : <p>---.---.--</p>
+          }
+        </>)
+      },
+    },
     { field: "ProviderTxnID", headerName: 'ProviderTxnID', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
     { field: "PushToVrudhi", headerName: 'PushToVrudhi', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
-    { field: "isordercreated", headerName: 'isordercreated', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
+    paramsValue?.filterType === "duplicatePayment"
+      ? { field: "isordercreated", headerName: 'Isordercreated', flex: 1, minWidth: 100 }
+      : null,
     { field: "PaymentReceivedFrom", headerName: 'PaymentReceivedFrom', flex: 1, minWidth: 100, wrapText: true, autoHeight: true },
     { field: "Type", headerName: 'Type', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
-    // {
-    //   field: "action",
-    //   headerName: 'Action',
-    //   flex: 1,
-    //   maxWidth: 100,
-    //   headerClass: 'ag-left-aligned-header',
-    //   cellRenderer: (params) => (
-    //     <p onClick={() => {
-    //       openModal()
-    //     }} className="w-fit bg-gradient-to-r from-[#614119] via-[#d4af37] to-[#614119] cursor-pointer text-center text-white px-2 rounded-sm ">View</p>
-    //   ),
-    // }
-  ]);
+  ].filter(Boolean);
 
-
+  
   const ExportExcel = async () => {
     try {
       const response = await axios.post(
@@ -82,38 +79,77 @@ const BmcAgGridTable = () => {
       document.body.appendChild(link);
       link.click();
       link.remove();
-
     } catch (err) {
       console.error(err);
     }
   };
 
-
   const fetchAllBmcData = async () => {
+     setIsLoading(true)
     try {
-      const data = await apiservice?.getBmcReportDetails(paramsValue?.filterType, paramsValue?.fromDate, paramsValue?.toDate);
-      setBmcReports(data?.result)
+      if (paramsValue?.filterType == 'paymentRecieved' || paramsValue?.filterType == 'pushedToVurdhi' || paramsValue?.filterType == 'notPushedToVurdhi') {
+        const data = await apiservice?.getBmcReportDetails(paramsValue?.filterType, paramsValue?.fromDate, paramsValue?.toDate);
+        return setBmcReports(data?.result)
+      }
+      if (paramsValue?.filterType == 'overalltxn' || paramsValue?.filterType == 'emi' || paramsValue?.filterType == 'newmember' || paramsValue?.filterType == 'duplicatePayment') {
+        const data = await apiservice?.getPortalTxnByFilter(paramsValue?.filterType, paramsValue?.fromDate, paramsValue?.toDate);
+        return setBmcReports(data)
+      }
     } catch (err) {
       throw new Error(err)
+    }finally{
+    setIsLoading(false)
+  }
+  }
+
+  const searchRefNo = async () => {
+    if (!searchTerm) {
+      return toast.warn('Search term required !')
     }
+    const data = bmcReports?.filter((item, i) => item?.ReferenceNumber == searchTerm)
+    return setBmcReports(data)
   }
 
   useEffect(() => {
     fetchAllBmcData()
   }, [search])
 
+   if(isLoading){
+    return <div className='h-screen flex flex-col justify-center items-center'>
+      <RingLoader color="#c7a44d"/>
+      <span>Loading.....</span>
+      </div>
+  }
+
   return (
     <div className="ag-theme-alpine w-full overflow-x-auto" >
       <h1 className='text-center text-2xl my-5 border-b border-amber-200 text-[#c7a44d]'>{title}</h1>
-      <div className='w-full my-8 '>
+      <div className='w-full my-8'>
         <div className='flex justify-between items-center'>
           <p className='my-2 font-semibold text-[#614119]'>Records:{bmcReports?.length}</p>
-          <button
-            className="mb-4 px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
-            onClick={ExportExcel}
-          >
-            Export to Excel
-          </button>
+          <div className='flex gap-x-4 w-full justify-end items-end pb-3'>
+            <div className='w-full max-w-[250px]'>
+              <div className='flex flex-row justify-end items-center gap-2'>
+                <div className='w-full'>
+                  <input type="search" placeholder='Refrence No.'
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value)
+                      if (e.target.value === '') {
+                        fetchAllBmcData()
+                      }
+                    }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
+                </div>
+                <div className='bg-[#b8860b] p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => searchRefNo()}> <CiSearch color='white' size={24} /></div>
+              </div>
+            </div>
+            <div>
+              <button
+                className=" px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
+                onClick={ExportExcel}>
+                Export to Excel
+              </button>
+            </div>
+          </div>
         </div>
 
         <AgGridReact
@@ -135,16 +171,6 @@ const BmcAgGridTable = () => {
           paginationPageSize={20}
           paginationPageSizeSelector={[20, 50, 100, 200]}
         />
-      </div>
-      <div>
-        {showModal && (
-          <Modal onClose={closeModal}>
-            <p className='text-center font-bold border-b-1 pb-2 '>Summary</p>
-            <div className="overflow-x-auto mt-4 mb-2 text-black">
-
-            </div>
-          </Modal>
-        )}
       </div>
     </div>
   )

@@ -136,3 +136,9 @@ body {
     gap: 0 !important;
   }
 }
+
+.late-delivery-row {
+  background-color: #ffdddd !important; /* light red */
+  color: #b30000 !important;
+  font-weight: 600;
+}

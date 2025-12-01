@@ -122,10 +122,10 @@ const ReportSgTable = () => {
     return (
         <div className="ag-theme-alpine w-full overflow-x-auto">
             <div className='w-full my-8 '>
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-between items-center mb-2'>
                     <p className='my-2 font-semibold text-[#614119]'>Imported Stylecodes:{dataSg?.length}</p>
                     <button
-                        className="mb-4 px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
+                        className=" px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
                         onClick={ExportExcel}
                     >
                         Export to Excel

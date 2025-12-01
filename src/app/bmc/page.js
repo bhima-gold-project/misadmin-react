@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
 import { startOfDay, endOfDay, format } from 'date-fns';
 import apiservice from '@/app/apiservices/bmcServices/page';
 import Card from '@/components/Card';
@@ -8,15 +7,14 @@ import { useRouter } from 'next/navigation';
 
 const BmcSummary = () => {
   const today = new Date();
-  const dispatch = useDispatch();
   const router = useRouter();
-
 
   const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
   const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
-
   const [bmcSummary, setBmcSummary] = useState([])
   const [duplicateRefno, setDuplicateRefno] = useState([])
+  const [missingRefno, setMissingRefno] = useState([])
+  const [typePayments, setTypePayments] = useState([])
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -46,9 +44,29 @@ const BmcSummary = () => {
     }
   }
 
+  const fetchMissingRefNo = async () => {
+    try {
+      const data = await apiservice?.getMissingRefNo(fromDate, toDate);
+      setMissingRefno(data)
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+
+  const fetchTypePayments = async () => {
+    try {
+      const data = await apiservice?.getTypePaymentDetails(fromDate, toDate);
+      setTypePayments(data)
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+
   useEffect(() => {
     fetchBmcSummary()
     fetchDuplicateRefNo()
+    fetchMissingRefNo()
+    fetchTypePayments()
   }, [fromDate, toDate])
 
   return (
@@ -79,14 +97,25 @@ const BmcSummary = () => {
           />
         </div>
       </div>
-      <div className='my-5 grid grid-cols-4  gap-5'>
+      <div className='my-5 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 pb-10 grid-cols-1 gap-5'>
+       <div>
+          <Card
+            title="Overall Transaction"
+            amount={bmcSummary?.overallTxn?.TxnAmt}
+            onView={() => {
+              router.push(
+                `/bmc/${encodeURIComponent('Overall Transaction')}?filterType=overalltxn&fromDate=${fromDate}&toDate=${toDate}`
+              );
+            }}
+          />
+        </div>
         <div>
           <Card
-            title="Overall Transactions"
+            title="Payment Recieved"
             amount={bmcSummary?.summary?.TxnAmt}
             onView={() => {
               router.push(
-                `/bmc/${encodeURIComponent('Overall Transactions')}?filterType=overalltxn&fromDate=${fromDate}&toDate=${toDate}`
+                `/bmc/${encodeURIComponent('Payment Recieved')}?filterType=paymentRecieved&fromDate=${fromDate}&toDate=${toDate}`
               );
             }}
           />
@@ -98,7 +127,7 @@ const BmcSummary = () => {
             amount={bmcSummary?.pushedtovurdhi?.TxnAmt}
             onView={() => {
               router.push(
-                `/bmc/${encodeURIComponent('Pushed To Vurdhi')}?filterType=pushedtovurdhi&fromDate=${fromDate}&toDate=${toDate}`
+                `/bmc/${encodeURIComponent('Pushed To Vurdhi')}?filterType=pushedToVurdhi&fromDate=${fromDate}&toDate=${toDate}`
               );
             }}
           />
@@ -110,7 +139,7 @@ const BmcSummary = () => {
             amount={duplicateRefno?.notpushed?.TxnAmt}
             onView={() => {
               router.push(
-                `/bmc/${encodeURIComponent('Not Pushed To Vurdhi')}?filterType=notpushedtovurdhi&fromDate=${fromDate}&toDate=${toDate}`
+                `/bmc/${encodeURIComponent('Not Pushed To Vurdhi')}?filterType=notPushedToVurdhi&fromDate=${fromDate}&toDate=${toDate}`
               );
             }}
           />
@@ -118,15 +147,39 @@ const BmcSummary = () => {
 
         <div>
           <Card
-            title="Duplicate Records"
+            title="Refunded Amount"
             amount={duplicateRefno?.duplicateRefno?.TxnAmt}
             onView={() => {
               router.push(
-                `/bmc/${encodeURIComponent('Duplicate Records')}?filterType=duplicatePayment&fromDate=${fromDate}&toDate=${toDate}`
+                `/bmc/${encodeURIComponent('Refunded Amount')}?filterType=duplicatePayment&fromDate=${fromDate}&toDate=${toDate}`
               );
             }}
           />
         </div>
+
+       <div>
+          <Card
+            title="EMI Transaction"
+            amount={typePayments?.EmiAmount?.EAmount}
+            onView={() => {
+              router.push(
+                `/bmc/${encodeURIComponent('EMI Transaction')}?filterType=emi&fromDate=${fromDate}&toDate=${toDate}`
+              );
+            }}
+          />
+        </div>
+
+         <div>
+            <Card
+              title="New Member Transaction"
+              amount={typePayments?.newMemberAmt?.NAmount}
+              onView={() => {
+                router.push(
+                  `/bmc/${encodeURIComponent('New Member Transaction')}?filterType=newmember&fromDate=${fromDate}&toDate=${toDate}`
+                );
+              }}
+            />
+        </div>     
       </div>
     </div>
   )

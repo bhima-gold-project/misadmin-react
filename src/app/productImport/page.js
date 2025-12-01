@@ -186,7 +186,7 @@ const ProductImport = () => {
 
                 {resultData?.length > 0 && !loadExcel ?
                     <div>
-                        <div className='lg:flex lg:flex-row lg:justify-between lg:items-center  justify-center'>
+                        <div className='lg:flex lg:flex-row lg:justify-between lg:items-center md:flex md:justify-between  justify-center'>
                             <div className='flex justify-start items-center gap-x-6'>
                                 <p>Stylecodes:{resultData?.length}</p>
                                 <p>Selected:{selectedStylecodes?.length}</p>

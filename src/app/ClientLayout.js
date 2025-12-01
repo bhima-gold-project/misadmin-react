@@ -18,7 +18,7 @@ export default function ClientLayout({ children }) {
 
   {/* SIDEBAR – only show on md+ */}
   {showSidebar && (
-    <aside className="hidden md:block md:col-span-3 lg:col-span-2 bg-[#8a5a20]">
+    <aside className="hidden lg:block lg:col-span-3  xl:block xl:col-span-2 bg-[#8a5a20]">
       <Sidebar />
     </aside>
   )}
@@ -26,7 +26,7 @@ export default function ClientLayout({ children }) {
   {/* MAIN CONTENT */}
   <main
     className={`${showSidebar ? 
-      "col-span-12 md:col-span-9 lg:col-span-10 overflow-y-scroll h-screen" : 
+      "col-span-12 lg:col-span-9 xl:col-span-10 overflow-y-scroll h-screen" : 
       "col-span-12"
     } p-4`}
   >
@@ -34,11 +34,11 @@ export default function ClientLayout({ children }) {
   </main>
 
   {/* MOBILE BOTTOM MENU – only show on small screens */}
-
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
+  {showSidebar && (
+    <div className="fixed block xl:hidden lg:hidden bottom-0 left-0 right-0 z-50">
       <MobileBottomMenu />
     </div>
-
+  )}
 </div>
 
       <ToastContainer

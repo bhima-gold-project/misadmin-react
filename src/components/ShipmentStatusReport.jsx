@@ -20,7 +20,6 @@ const ShipmentStatusReport = () => {
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState({});
 
-
     const openModal = () => setShowModal(true);
     const closeModal = () => setShowModal(false);
 
@@ -37,7 +36,7 @@ const ShipmentStatusReport = () => {
 
         {
             field: "AwNo",
-            headerName: 'Shiplable No',
+            headerName: 'Aw Billno',
             flex: 1,
             minWidth: 100,
             wrapText: true,
@@ -70,7 +69,7 @@ const ShipmentStatusReport = () => {
             },
         },
         {
-            field: "Status", headerName: 'Status', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
+            field: "TranName", headerName: 'Status', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
             headerClass: 'ag-left-aligned-header',
             cellRenderer: (params) => {
                 return (
@@ -87,7 +86,7 @@ const ShipmentStatusReport = () => {
                     <>
                         {
                             params.value && params.value != 'null' ?
-                                <p>{format(params?.value, "yyyy-MM-dd HH:mm:ss")}</p> : <p>Not Assigned</p>
+                                <p>{format(params?.value, "yyyy-MM-dd HH:mm")}</p> : <p>Not Assigned</p>
                         }
                     </>
 
@@ -118,7 +117,23 @@ const ShipmentStatusReport = () => {
                     <>
                         {
                             params.value && params.value != 'null' ?
-                                <p>{format(params?.value, "yyyy-MM-dd HH:mm:ss")}</p> : <p>---.---.--</p>
+                                <p>{format(params?.value, "yyyy-MM-dd HH:mm")}</p> : <p>---.---.--</p>
+                        }
+                    </>
+
+                );
+            },
+        },
+
+        {
+            field: "estiimated_delivery", headerName: 'Estimated Delivery', flex: 1, minWidth: 100, wrapText: true,
+            autoHeight: true, headerClass: 'ag-left-aligned-header',
+            cellRenderer: (params) => {
+                return (
+                    <>
+                        {
+                            params.value && params.value != 'null' ?
+                                <p>{format(params?.value, "yyyy-MM-dd HH:mm")}</p> : <p>---.---.--</p>
                         }
                     </>
 
@@ -173,10 +188,10 @@ const ShipmentStatusReport = () => {
     return (
         <div className="ag-theme-alpine w-full overflow-x-auto">
             <div className='w-full my-8 '>
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-between items-center mb-2'>
                     <p className='my-2 font-semibold text-[#614119]'>Total:{shipmentStatusData?.length}</p>
                     <button
-                        className="mb-4 px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
+                        className="px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
                         onClick={ExportExcel}
                     >
                         Export to Excel
@@ -194,6 +209,17 @@ const ShipmentStatusReport = () => {
                         filter: false,
                         suppressMovable: true,
                         cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'start', fontSize: '12px', borderRight: '1px solid #d3d3d3', }
+                    }}
+                    getRowClass={(params) => {
+                        const delivered = params.data?.DeliveredOn;
+                        const estimated = params.data?.estiimated_delivery;
+                        if (delivered && estimated) {
+                            const deliveredDate = new Date(delivered);
+                            const estimatedDate = new Date(estimated);
+                            if (deliveredDate > estimatedDate) {
+                                return "late-delivery-row";
+                            }}
+                        return "";
                     }}
                     domLayout="autoHeight"
                     copyHeadersToClipboard={true}
@@ -214,8 +240,17 @@ const ShipmentStatusReport = () => {
 
                                 }}><MdContentCopy /></span></p>
                             </div>
+
                             <div>
-                                <p className='font-semibold flex items-center gap-x-2'>Aw No: <Link href={track_url}
+                                <p className='font-semibold flex items-center gap-x-2'>Order RefNo:
+                                    <span>{modalData?.Orderrefno}</span> <span className='cursor-pointer' onClick={() => {
+                                        navigator.clipboard.writeText(modalData?.Orderrefno);
+                                        toast.success('Order RefNo. copied to clipboard!');
+
+                                    }}><MdContentCopy /></span></p>
+                            </div>
+                            <div>
+                                <p className='font-semibold flex items-center gap-x-2'>Aw Billno: <Link href={track_url}
                                     target="_blank" rel="noopener noreferrer" className='text-blue-500 underline'>{modalData?.AwNo}</Link> <span className='cursor-pointer' onClick={() => {
                                         navigator.clipboard.writeText(modalData?.AwNo);
                                         toast.success('AW No. copied to clipboard!');
@@ -225,13 +260,18 @@ const ShipmentStatusReport = () => {
                             <div>
                                 <p className='font-semibold'>Logistic Partner : <span className='font-medium'> {modalData?.logisticPartner && modalData?.logisticPartner != 'null' ? modalData?.logisticPartner : 'Not Assigned'}</span></p>
                             </div>
-                            {/* <div>
-                                <p className='font-semibold'>Mobile No :<span className='font-medium'>{modalData?.mobile_no}</span></p>
+
+                            <div>
+                                <p className='font-semibold'>Mobile No :&nbsp;<span className='font-medium'>{modalData?.mobile_no}</span></p>
                             </div>
 
                             <div>
-                                <p className='font-semibold'>Customer Name :<span className='font-medium capitalize'>{modalData?.cust_name}</span></p>
-                            </div> */}
+                                <p className='font-semibold'>Customer Name :&nbsp;<span className='font-medium capitalize'>{modalData?.cust_name}</span></p>
+                            </div>
+
+                            <div>
+                                <p className='font-semibold'>Shipping City :&nbsp;<span className='font-medium capitalize'>{modalData?.ShippingCity}</span></p>
+                            </div>
                         </div>
                     </Modal>
                 )}

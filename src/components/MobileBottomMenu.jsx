@@ -41,20 +41,27 @@ function MobileBottomMenu() {
         { title: "Shipment Status Report", path: "/orders/shipmentStatusReport" },
       ],
     },
+
+     {
+      title: "BMC Reports",
+      children: [
+        { title: "Bmc Summary", path: "/bmc" },
+      ],
+    },
   ];
 
   const LogOut = async () => {
     try {
-
-      const response = await axios.post(`${BASE_URL}/api/logout`);
+      const response = await axios.post(`${BASE_URL}/api/users/mis-logout`,{},{ withCredentials: true });
       if (response?.data?.success) {
+        localStorage.removeItem('token')
         toast.success(response?.data?.message);
-        router.push('/login');
+        router.push("/login");
       }
     } catch (err) {
       throw err;
     }
-  }
+  };
 
   return (
     <>

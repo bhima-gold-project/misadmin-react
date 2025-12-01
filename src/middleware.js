@@ -9,13 +9,13 @@ export async function middleware(req) {
 
   // Define protected route prefixes
   const protectedPrefixes = [
-    "/", 
+    "/",
     "/productImport",
     "/orders",
     "/bmc"
   ];
 
-  const isProtected = protectedPrefixes.some(prefix => 
+  const isProtected = protectedPrefixes.some(prefix =>
     path === prefix || path.startsWith(prefix + "/")
   );
 
@@ -25,12 +25,40 @@ export async function middleware(req) {
     }
 
     try {
-      // Validate token
-      await jwtVerify(token, SECRET);
-      // Token is valid → allow access
-      return NextResponse.next();
+      const verified = await jwtVerify(token, SECRET);
+      const payload = verified.payload;
+      const role = payload.role;
+
+      // Allow home page "/" for ALL roles
+      if (path === "/") {
+        return NextResponse.next();
+      }
+
+      // PRODUCT USER → only productImport/*
+      if (role === "product") {
+        if (!path.startsWith("/productImport")) {
+          return NextResponse.redirect(new URL("/unauthorized", req.url));
+        }
+        return NextResponse.next();
+      }
+
+      // BMC USER → only /bmc/*
+      if (role === "bmc") {
+        if (!path.startsWith("/bmc")) {
+          return NextResponse.redirect(new URL("/unauthorized", req.url));
+        }
+        return NextResponse.next();
+      }
+
+      // ADMIN → allow everything
+      if (role === "admin") {
+        return NextResponse.next();
+      }
+
+      // Unknown role → block
+      return NextResponse.redirect(new URL("/unauthorized", req.url));
+
     } catch (e) {
-      // Invalid or expired token → redirect
       return NextResponse.redirect(new URL("/login", req.url));
     }
   }
