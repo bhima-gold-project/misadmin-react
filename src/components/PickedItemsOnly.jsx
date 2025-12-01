@@ -1,5 +1,3 @@
-'use client'
-
 "use client";
 import { AgGridReact } from 'ag-grid-react'
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
@@ -10,7 +8,6 @@ import { useSelector } from 'react-redux';
 import Modal from './ReactModal';
 import { MdContentCopy } from "react-icons/md";
 import { toast } from 'react-toastify';
-import { format } from 'date-fns';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -88,7 +85,7 @@ const PickedItemsOnlyReport = () => {
                     <>
                         {
                             params.value && params.value != 'null' ?
-                                <p>{format(params?.value, "yyyy-MM-dd HH:mm:ss")}</p> : <p>Not Assigned</p>
+                                <p>{params.value.slice(0, 16).replace("T", " ")}</p>  : <p>Not Assigned</p>
                         }
                     </>
 
@@ -119,7 +116,7 @@ const PickedItemsOnlyReport = () => {
                     <>
                         {
                             params.value && params.value != 'null' ?
-                                <p>{format(params?.value, "yyyy-MM-dd HH:mm:ss")}</p> : <p>---.---.--</p>
+                                 <p>{params.value.slice(0, 16).replace("T", " ")}</p>  : <p>---.---.--</p>
                         }
                     </>
 

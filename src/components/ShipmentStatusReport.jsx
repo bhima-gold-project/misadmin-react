@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import Modal from './ReactModal';
 import { MdContentCopy } from "react-icons/md";
 import { toast } from 'react-toastify';
-import { format } from 'date-fns';
 import { ExportExcel } from '@/utils';
 
 
@@ -87,7 +86,7 @@ const ShipmentStatusReport = () => {
                     <>
                         {
                             params.value && params.value != 'null' ?
-                                <p>{format(params?.value, "yyyy-MM-dd HH:mm")}</p> : <p>Not Assigned</p>
+                              <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>Not Assigned</p>
                         }
                     </>
 
@@ -118,7 +117,7 @@ const ShipmentStatusReport = () => {
                     <>
                         {
                             params.value && params.value != 'null' ?
-                                <p>{format(params?.value, "yyyy-MM-dd HH:mm")}</p> : <p>---.---.--</p>
+                               <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>---.---.--</p>
                         }
                     </>
 
@@ -134,7 +133,7 @@ const ShipmentStatusReport = () => {
                     <>
                         {
                             params.value && params.value != 'null' ?
-                                <p>{format(params?.value, "yyyy-MM-dd HH:mm")}</p> : <p>---.---.--</p>
+                                <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>---.---.--</p>
                         }
                     </>
 

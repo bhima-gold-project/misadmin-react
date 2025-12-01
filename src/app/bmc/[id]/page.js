@@ -2,13 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
-import axios from 'axios';
-import Modal from '@/components/ReactModal';
-import ModalDetailsTable from '@/components/ModalTableData';
 import { useParams, useSearchParams } from 'next/navigation';
 import apiservice from '../../apiservices/bmcServices/page';
-import { BASE_URL } from '../../../../constant';
-import { format } from 'date-fns';
 import { CiSearch } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import { RingLoader } from 'react-spinners';
@@ -47,18 +42,18 @@ const BmcAgGridTable = () => {
       cellRenderer: (params) => {
         return (<>
           {
-            params.value && params.value != 'null' ? <p>{format(params?.value, "yyyy-MM-dd HH:mm")}</p> : <p>---.---.--</p>
+            params.value && params.value != 'null' ?  <p>{params.value.slice(0, 16).replace("T", " ")}</p>  : <p>---.---.--</p>
           }
         </>)
       },
     },
     { field: "ProviderTxnID", headerName: 'ProviderTxnID', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
-    { field: "PushToVrudhi", headerName: 'PushToVrudhi', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
-    paramsValue?.filterType === "duplicatePayment"
-      ? { field: "isordercreated", headerName: 'Isordercreated', flex: 1, minWidth: 100 }
-      : null,
+   // { field: "PushToVrudhi", headerName: 'PushToVrudhi', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
+    // paramsValue?.filterType === "duplicatePayment"
+    //   ? { field: "isordercreated", headerName: 'Isordercreated', flex: 1, minWidth: 100 }
+    //   : null,
     { field: "PaymentReceivedFrom", headerName: 'PaymentReceivedFrom', flex: 1, minWidth: 100, wrapText: true, autoHeight: true },
-    { field: "Type", headerName: 'Type', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
+    // { field: "Type", headerName: 'Type', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
   ].filter(Boolean);
 
   
