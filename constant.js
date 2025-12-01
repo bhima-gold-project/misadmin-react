@@ -5,6 +5,7 @@
 // export const SEQUEL_TRACK = 'https://sequel247.com/track/'
 // export const BLUEDART_TRACK = 'https://trackcourier.io/track-and-trace/blue-dart-courier/'
 // export const PRODUCT_IMAGE_URL = 'https://productimages.bhimagold.com/'
+// export const CMS_TRACK = 'https://b2c.cms.com/track-order?awb='
 
 ///////////////PRODUCTION CONSTANTS/////////////////////
 
@@ -14,3 +15,4 @@ export const PRODUCT_URL_SG = 'https://www.bhimagold.com/en-SG/products/'
 export const SEQUEL_TRACK = 'https://sequel247.com/track/'
 export const BLUEDART_TRACK = 'https://trackcourier.io/track-and-trace/blue-dart-courier/'
 export const PRODUCT_IMAGE_URL = 'https://productimages.bhimagold.com/'
+export const CMS_TRACK = 'https://b2c.cms.com/track-order?awb='
