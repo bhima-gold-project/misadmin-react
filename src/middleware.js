@@ -50,6 +50,16 @@ export async function middleware(req) {
         return NextResponse.next();
       }
 
+      
+      // BMC USER → only /bmc/*
+      if (role === "order") {
+        if (!path.startsWith("/orders")) {
+          return NextResponse.redirect(new URL("/unauthorized", req.url));
+        }
+        return NextResponse.next();
+      }
+
+
       // ADMIN → allow everything
       if (role === "admin") {
         return NextResponse.next();
