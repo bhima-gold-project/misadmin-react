@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import { CiSearch } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import { RingLoader } from 'react-spinners';
+import { ExportExcel } from '@/utils';
 
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -61,28 +62,7 @@ const BmcAgGridTable = () => {
   ].filter(Boolean);
 
   
-  const ExportExcel = async () => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/exportToExcel`,
-        bmcReports,
-        {
-          responseType: "blob"
-        }
-      );
-
-      // Create download link
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `report_${Date.now()}.xlsx`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (err) {
-      console.error(err);
-    }
-  };
+ 
 
   const fetchAllBmcData = async () => {
      setIsLoading(true)
@@ -145,7 +125,8 @@ const BmcAgGridTable = () => {
             <div>
               <button
                 className=" px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
-                onClick={ExportExcel}>
+               onClick={()=>ExportExcel(bmcReports)}
+                >
                 Export to Excel
               </button>
             </div>

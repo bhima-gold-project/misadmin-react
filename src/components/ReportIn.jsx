@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import Modal from './ReactModal';
 import axios from 'axios';
 import ModalDetailsTable from './ModalTableData';
+import { ExportExcel } from '@/utils';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -91,29 +92,7 @@ const ReportInTable = () => {
         }
     }
 
-    const ExportExcel = async () => {
-        try {
-            const response = await axios.post(
-                `${BASE_URL}/api/exportToExcel`,
-                dataIn,
-                {
-                    responseType: "blob"
-                }
-            );
-
-            // Create download link
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", `report_${Date.now()}.xlsx`);
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-
-        } catch (err) {
-            console.error(err);
-        }
-    };
+   
 
 
 
@@ -124,7 +103,7 @@ const ReportInTable = () => {
                     <p className='my-2 font-semibold text-[#614119]'>Imported Stylecodes:{dataIn?.length}</p>
                     <button
                         className=" px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
-                        onClick={ExportExcel}
+                        onClick={()=>ExportExcel(dataIn)}
                     >
                         Export to Excel
                     </button>
