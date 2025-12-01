@@ -34,9 +34,6 @@ export async function middleware(req) {
         if (!path.startsWith("/productImport")) {
           return NextResponse.redirect(new URL("/unauthorized", req.url));
         }
-        const res = NextResponse.next();
-        res.headers.set("x-middleware-cache", "no-cache");
-        return res;
       }
 
       // BMC USER
@@ -44,9 +41,6 @@ export async function middleware(req) {
         if (!path.startsWith("/bmc")) {
           return NextResponse.redirect(new URL("/unauthorized", req.url));
         }
-        const res = NextResponse.next();
-        res.headers.set("x-middleware-cache", "no-cache");
-        return res;
       }
 
       // ORDER USER
@@ -54,9 +48,6 @@ export async function middleware(req) {
         if (!path.startsWith("/orders")) {
           return NextResponse.redirect(new URL("/unauthorized", req.url));
         }
-        const res = NextResponse.next();
-        res.headers.set("x-middleware-cache", "no-cache");
-        return res;
       }
 
       // ADMIN → allow everything

@@ -34,7 +34,7 @@ const Login = () => {
       const response = await axios.post(`${BASE_URL}/api/users/mis-login`, loginPayload, { withCredentials: true });
       const result = await response?.data;
       if (result?.success === true) {
-        localStorage.setItem('token', result?.data?.token)
+        localStorage.setItem('mistoken', result?.data?.token)
         toast.success(result?.message);
         router.push('/');
       } else {

@@ -14,7 +14,7 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
     };
 
     const reImportStylecode = async () => {
-          const token = localStorage.getItem('token')
+          const token = localStorage.getItem('mistoken')
         try {
             const response = await axios.post(`${BASE_URL}/api/re_importStylecode`, {
                 Stylecode: StyleCode,
@@ -41,7 +41,7 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
     }
 
     const ViewImages = async () => {
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('mistoken')
         try {
             const response = await axios.post(`${BASE_URL}/api/getProductImages`, {
                 Stylecode: StyleCode

@@ -60,7 +60,7 @@ const ProductImport = () => {
             return toast.warn('Please upload a CSV file.');
         }
         setLoadExcel(true)
-     const token = localStorage.getItem('token')
+     const token = localStorage.getItem('mistoken')
         try {
             const response = await axios.post(`${BASE_URL}/api/getStylecodeImages`,
                 { stylecodes: excelData },
@@ -88,7 +88,7 @@ const ProductImport = () => {
             return toast.error('Stylecodes not selected !');
         }
         setLoadImport(true)
-          const token = localStorage.getItem('token')
+          const token = localStorage.getItem('mistoken')
         try {
             const response = await axios.post(`${BASE_URL}/api/importStylecode`,
                  { jsonPayload: selectedStylecodes },
@@ -122,7 +122,7 @@ const ProductImport = () => {
             if (!searchTerm) {
                 return toast.error('Please enter the value..');
             }
-           const token = localStorage.getItem('token')
+           const token = localStorage.getItem('mistoken')
             const result = await axios.get(`${BASE_URL}/api/searchstylecodeCsv?search=${searchTerm}`,{
                     headers: {
                         Authorization: `Bearer ${token}`,

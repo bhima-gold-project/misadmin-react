@@ -54,7 +54,7 @@ function MobileBottomMenu() {
     try {
       const response = await axios.post(`${BASE_URL}/api/users/mis-logout`,{},{ withCredentials: true });
       if (response?.data?.success) {
-        localStorage.removeItem('token')
+        localStorage.removeItem('mistoken')
         toast.success(response?.data?.message);
         router.push("/login");
       }

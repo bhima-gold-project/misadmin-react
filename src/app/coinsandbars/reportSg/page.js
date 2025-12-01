@@ -32,7 +32,7 @@ const CoinsReportSg = () => {
 
   const getReportsSg = async () => {
     try {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('mistoken')
     const response = await axios.get(`${BASE_URL}/api/importedCoins?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}`,  {
           headers: {
             Authorization: `Bearer ${token}`,   
@@ -52,7 +52,7 @@ const CoinsReportSg = () => {
         getReportsSg()
         return
       }
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('mistoken')
       const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-SG`,  {
           headers: {
             Authorization: `Bearer ${token}`,   

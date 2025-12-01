@@ -76,7 +76,7 @@ const ReportSgTable = () => {
                 Stylecode: data?.StyleCode,
                 sku: data?.sku,
             }
-             const token = localStorage.getItem('token')
+             const token = localStorage.getItem('mistoken')
             const response = await axios.post(`${BASE_URL}/api/checkstylecodeimport`, payload,
                 {
                     headers: {

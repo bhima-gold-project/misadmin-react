@@ -5,7 +5,7 @@ import { BASE_URL } from "../../../../constant";
 
 const getBmcSummary = async (fromDate, toDate) => {
   try {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('mistoken')
     const response = await axios.post(`${BASE_URL}/api/bmcReport?fromDate=${fromDate}&toDate=${toDate}`, {},
       {
         headers: {
@@ -22,7 +22,7 @@ const getBmcSummary = async (fromDate, toDate) => {
 
 const getDuplicateRefNo = async (fromDate, toDate) => {
   try {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('mistoken')
     const response = await axios.post(`${BASE_URL}/api/duplicateRefNo?fromDate=${fromDate}&toDate=${toDate}`, {},
       {
         headers: {
@@ -39,7 +39,7 @@ const getDuplicateRefNo = async (fromDate, toDate) => {
 
 const getBmcReportDetails = async (filterType, fromDate, toDate) => {
   try {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('mistoken')
     const response = await axios.post(`${BASE_URL}/api/bmcReportdetails?fromDate=${fromDate}&toDate=${toDate}&filterType=${filterType}`, {},
       {
         headers: {
@@ -56,7 +56,7 @@ const getBmcReportDetails = async (filterType, fromDate, toDate) => {
 
 const getPortalTxnByFilter = async (filterType,fromDate, toDate) => {
   try {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('mistoken')
     const response = await axios.post(`${BASE_URL}/api/portalTxnByFilter?fromDate=${fromDate}&toDate=${toDate}&filterType=${filterType}`, {},
       {
         headers: {
@@ -73,7 +73,7 @@ const getPortalTxnByFilter = async (filterType,fromDate, toDate) => {
 
 const getMissingRefNo = async (fromDate, toDate) => {
   try {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('mistoken')
     const response = await axios.post(`${BASE_URL}/api/missingRefNo?fromDate=${fromDate}&toDate=${toDate}`, {},
       {
         headers: {
@@ -90,7 +90,7 @@ const getMissingRefNo = async (fromDate, toDate) => {
 
 const getTypePaymentDetails = async (fromDate, toDate) => {
   try {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('mistoken')
     const response = await axios.post(`${BASE_URL}/api/typeENsplitPayment?fromDate=${fromDate}&toDate=${toDate}`, {},
       {
         headers: {

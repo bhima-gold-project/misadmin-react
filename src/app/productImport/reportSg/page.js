@@ -33,7 +33,7 @@ const ReportSg = () => {
 
   const getReportsSg = async () => {
     try {
-       const token = localStorage.getItem('token')
+       const token = localStorage.getItem('mistoken')
       const response = await axios.get(`${BASE_URL}/api/importedProducts?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}`,
         {
           headers: {
@@ -55,7 +55,7 @@ const ReportSg = () => {
         getReportsSg()
         return
       }
-       const token = localStorage.getItem('token')
+       const token = localStorage.getItem('mistoken')
       const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-SG`,
         {
           headers: {

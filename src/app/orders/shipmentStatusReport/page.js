@@ -30,7 +30,7 @@ const ShipmentStatus = () => {
 
     const getShipmentStatus = async () => {
         try {
-             const token = localStorage.getItem('token')
+             const token = localStorage.getItem('mistoken')
             const response = await axios.get(`${BASE_URL}/api/shipmentStatus?fromDate=${fromDate}&toDate=${toDate}`,
                 {
                     headers: {
@@ -48,7 +48,7 @@ const ShipmentStatus = () => {
 
     const search = async () => {
         if (searchTerm === '') return;
-         const token = localStorage.getItem('token')
+         const token = localStorage.getItem('mistoken')
         try {
             const response = await axios.get(`${BASE_URL}/api/searchStatus?search=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}`,
                 {
@@ -67,7 +67,7 @@ const ShipmentStatus = () => {
 
         const searchOders = async () => {
         if (searchOder === '') return;
-         const token = localStorage.getItem('token')
+         const token = localStorage.getItem('mistoken')
         try {
             const response = await axios.get(`${BASE_URL}/api/search?search=${searchOder}`,
                 {

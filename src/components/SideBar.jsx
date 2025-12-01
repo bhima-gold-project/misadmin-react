@@ -101,9 +101,9 @@ export default function Sidebar() {
     try {
       const response = await axios.post(`${BASE_URL}/api/users/mis-logout`,{},{ withCredentials: true });
       if (response?.data?.success) {
-        localStorage.removeItem('token')
+        localStorage.removeItem('mistoken')
         toast.success(response?.data?.message);
-        router.push("/login");
+       window.location.href = "/login?clear=1";
       }
     } catch (err) {
       throw err;
