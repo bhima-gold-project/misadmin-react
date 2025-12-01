@@ -2,7 +2,7 @@
 import { AgGridReact } from 'ag-grid-react'
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import React, { useState } from 'react'
-import { BASE_URL, BLUEDART_TRACK, SEQUEL_TRACK } from '../../constant';
+import { BASE_URL, BLUEDART_TRACK, CMS_TRACK, SEQUEL_TRACK } from '../../constant';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import Modal from './ReactModal';
@@ -182,8 +182,8 @@ const ShipmentStatusReport = () => {
     };
 
     const track_url = modalData?.logisticPartner?.toLowerCase() == 'sequel' || modalData?.logisticPartner?.toLowerCase() == 'sequel247' ? `${SEQUEL_TRACK}${modalData?.AwNo}` :
-        modalData?.logisticPartner?.toLowerCase() == 'bluedart' ? `${BLUEDART_TRACK}${modalData?.AwNo}` : '#';
-
+        modalData?.logisticPartner?.toLowerCase() == 'bluedart' ? `${BLUEDART_TRACK}${modalData?.AwNo}` : 
+        modalData?.logisticPartner?.toLowerCase() == 'cms' ? `${CMS_TRACK}${modalData?.AwNo}` :'#';
 
     return (
         <div className="ag-theme-alpine w-full overflow-x-auto">
