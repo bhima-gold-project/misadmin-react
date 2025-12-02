@@ -20,6 +20,7 @@ const ReportSg = () => {
   const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
   const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
   const [searchTerm, setSearchTerm] = useState('')
+  const [toggle, setToggle] = useState("imported");
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -33,8 +34,9 @@ const ReportSg = () => {
 
   const getReportsSg = async () => {
     try {
+       const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedProducts?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2`:`${BASE_URL}/api/importedProducts?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
        const token = localStorage.getItem('mistoken')
-      const response = await axios.get(`${BASE_URL}/api/importedProducts?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}`,
+      const response = await axios.get(apiUrl,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -73,7 +75,7 @@ const ReportSg = () => {
 
   useEffect(() => {
     getReportsSg()
-  }, [fromDate, toDate]);
+  }, [fromDate, toDate,toggle]);
 
   return (
     <div className="min-h-screen">
@@ -104,6 +106,38 @@ const ReportSg = () => {
               className="border-2 border-amber-300 p-1 text-black text-sm outline-amber-200 rounded w-full"
             />
           </div>
+        </div>
+
+           <div className="flex gap-6 items-center">
+          {/* Imported Stylecode */}
+          <label
+            className="flex items-center gap-2 cursor-pointer text-gray-700"
+          >
+            <input
+              type="radio"
+              name="stylecode"
+              value="imported"
+              checked={toggle === "imported"}
+              onChange={() => setToggle("imported")}
+              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+            />
+            <span>Imported Stylecode</span>
+          </label>
+
+          {/* Not Imported Stylecode */}
+          <label
+            className="flex items-center gap-2 cursor-pointer text-gray-700"
+          >
+            <input
+              type="radio"
+              name="stylecode"
+              value="not_imported"
+              checked={toggle === "not_imported"}
+              onChange={() => setToggle("not_imported")}
+              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+            />
+            <span>Not Imported Stylecode</span>
+          </label>
         </div>
 
         <div className='w-full max-w-[250px]'>

@@ -8,6 +8,7 @@ import { CiSearch } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import { RingLoader } from 'react-spinners';
 import { ExportExcel } from '@/utils';
+import CustomTooltip from '@/components/CustomTooltip';
 
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -29,38 +30,55 @@ const BmcAgGridTable = () => {
   const colDefs = [
     {
       field: "ReferenceNumber", headerName: 'ReferenceNumber', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
+      tooltipComponent: "customTooltip",
+      tooltipValueGetter: () => "Click to copy",
       cellRenderer: (params) => {
         return (
-          <p className='cursor-pointer' title='click to copy' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+          <p className='cursor-pointer' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
         );
       },
     },
-    { field: "MobileNo", headerName: 'MobileNo', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
+    {
+      field: "MobileNo", headerName: 'MobileNo', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
+      tooltipComponent: "customTooltip",
+      tooltipValueGetter: () => "Click to copy",
+      cellRenderer: (params) => {
+        return (
+          <p className='cursor-pointer' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+        );
+      },
+
+    },
     { field: "TxnAmt", headerName: 'TxnAmt', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
     {
       field: "ProviderDate", headerName: 'ProviderDate', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
       cellRenderer: (params) => {
         return (<>
           {
-            params.value && params.value != 'null' ?  <p>{params.value.slice(0, 16).replace("T", " ")}</p>  : <p>---.---.--</p>
+            params.value && params.value != 'null' ? <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>---.---.--</p>
           }
         </>)
       },
     },
-    { field: "ProviderTxnID", headerName: 'ProviderTxnID', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
-   // { field: "PushToVrudhi", headerName: 'PushToVrudhi', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
-    // paramsValue?.filterType === "duplicatePayment"
-    //   ? { field: "isordercreated", headerName: 'Isordercreated', flex: 1, minWidth: 100 }
-    //   : null,
+    {
+      field: "ProviderTxnID", headerName: 'ProviderTxnID', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
+      tooltipComponent: "customTooltip",
+      tooltipValueGetter: () => "Click to copy",
+      cellRenderer: (params) => {
+        return (
+          <p className='cursor-pointer' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+        );
+      },
+    },
     { field: "PaymentReceivedFrom", headerName: 'PaymentReceivedFrom', flex: 1, minWidth: 100, wrapText: true, autoHeight: true },
     // { field: "Type", headerName: 'Type', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
   ].filter(Boolean);
 
-  
- 
+
+
 
   const fetchAllBmcData = async () => {
-     setIsLoading(true)
+    setIsLoading(true)
     try {
       if (paramsValue?.filterType == 'paymentRecieved' || paramsValue?.filterType == 'pushedToVurdhi' || paramsValue?.filterType == 'notPushedToVurdhi') {
         const data = await apiservice?.getBmcReportDetails(paramsValue?.filterType, paramsValue?.fromDate, paramsValue?.toDate);
@@ -72,9 +90,9 @@ const BmcAgGridTable = () => {
       }
     } catch (err) {
       throw new Error(err)
-    }finally{
-    setIsLoading(false)
-  }
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const searchRefNo = async () => {
@@ -89,11 +107,11 @@ const BmcAgGridTable = () => {
     fetchAllBmcData()
   }, [search])
 
-   if(isLoading){
+  if (isLoading) {
     return <div className='h-screen flex flex-col justify-center items-center'>
-      <RingLoader color="#c7a44d"/>
+      <RingLoader color="#c7a44d" />
       <span>Loading.....</span>
-      </div>
+    </div>
   }
 
   return (
@@ -120,8 +138,8 @@ const BmcAgGridTable = () => {
             <div>
               <button
                 className=" px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
-               onClick={()=>ExportExcel(bmcReports)}
-                >
+                onClick={() => ExportExcel(bmcReports)}
+              >
                 Export to Excel
               </button>
             </div>
@@ -140,6 +158,11 @@ const BmcAgGridTable = () => {
             filter: false,
             suppressMovable: true,
             cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', borderRight: '1px solid #d3d3d3' }
+          }}
+          tooltipShowDelay={0}     // show instantly
+          tooltipHideDelay={2000}  // auto hide in 2s
+          components={{
+            customTooltip: CustomTooltip,
           }}
           domLayout="autoHeight"
           copyHeadersToClipboard={true}

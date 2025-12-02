@@ -19,6 +19,7 @@ const CoinsReportSg = () => {
   const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
   const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
   const [searchTerm, setSearchTerm] = useState('')
+  const [toggle, setToggle] = useState("imported");
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -32,13 +33,14 @@ const CoinsReportSg = () => {
 
   const getReportsSg = async () => {
     try {
-  const token = localStorage.getItem('mistoken')
-    const response = await axios.get(`${BASE_URL}/api/importedCoins?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}`,  {
-          headers: {
-            Authorization: `Bearer ${token}`,   
-            "Content-Type": "application/json"
-          }
-        });
+      const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedCoins?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2` : `${BASE_URL}/api/importedCoins?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
+      const token = localStorage.getItem('mistoken')
+      const response = await axios.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
       const result = await response?.data?.data
       dispatch(setImportedDataSg(result))
     } catch (err) {
@@ -52,13 +54,13 @@ const CoinsReportSg = () => {
         getReportsSg()
         return
       }
-        const token = localStorage.getItem('mistoken')
-      const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-SG`,  {
-          headers: {
-            Authorization: `Bearer ${token}`,   
-            "Content-Type": "application/json"
-          }
-        });
+      const token = localStorage.getItem('mistoken')
+      const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-SG`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
       const result = await response?.data?.data
       dispatch(setImportedDataSg(result))
     } catch (err) {
@@ -68,7 +70,7 @@ const CoinsReportSg = () => {
 
   useEffect(() => {
     getReportsSg()
-  }, [fromDate, toDate]);
+  }, [fromDate, toDate,toggle]);
 
   return (
     <div className="min-h-screen">
@@ -101,17 +103,49 @@ const CoinsReportSg = () => {
           </div>
         </div>
 
+        <div className="flex gap-6 items-center">
+          {/* Imported Stylecode */}
+          <label
+            className="flex items-center gap-2 cursor-pointer text-gray-700"
+          >
+            <input
+              type="radio"
+              name="stylecode"
+              value="imported"
+              checked={toggle === "imported"}
+              onChange={() => setToggle("imported")}
+              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+            />
+            <span>Imported Stylecode</span>
+          </label>
+
+          {/* Not Imported Stylecode */}
+          <label
+            className="flex items-center gap-2 cursor-pointer text-gray-700"
+          >
+            <input
+              type="radio"
+              name="stylecode"
+              value="not_imported"
+              checked={toggle === "not_imported"}
+              onChange={() => setToggle("not_imported")}
+              className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+            />
+            <span>Not Imported Stylecode</span>
+          </label>
+        </div>
+
         <div className='w-full max-w-[250px]'>
           <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>
           <div className='flex flex-row justify-end items-center gap-2 '>
             <div className='w-full'>
               <input type="search" placeholder='Sku | Stylecode...'
-               onChange={(e) => {
-                setSearchTerm(e.target.value)
-                if (e.target.value === '') {
-                  getReportsSg()
-                }
-              }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
+                onChange={(e) => {
+                  setSearchTerm(e.target.value)
+                  if (e.target.value === '') {
+                    getReportsSg()
+                  }
+                }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
             </div>
             <div className='bg-[#b8860b] p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => searchStylecodesSg()}> <CiSearch color='white' size={24} /></div>
           </div>
