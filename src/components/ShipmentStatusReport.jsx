@@ -9,6 +9,7 @@ import Modal from './ReactModal';
 import { MdContentCopy } from "react-icons/md";
 import { toast } from 'react-toastify';
 import { ExportExcel } from '@/utils';
+import CustomTooltip from './CustomTooltip';
 
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -26,9 +27,11 @@ const ShipmentStatusReport = () => {
     const [colDefs] = useState([
         {
             field: "ecomorderid", headerName: "Order No", flex: 1, minWidth: 100, wrapText: true, autoHeight: true, headerClass: 'ag-left-aligned-header',
+            tooltipComponent: "customTooltip",
+            tooltipValueGetter: () => "Click to copy",
             cellRenderer: (params) => {
                 return (
-                    <p className='cursor-pointer' title='click to copy' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                    <p className='cursor-pointer'  onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
                 );
             },
         },
@@ -42,12 +45,14 @@ const ShipmentStatusReport = () => {
             wrapText: true,
             autoHeight: true,
             headerClass: 'ag-left-aligned-header',
+            tooltipComponent: "customTooltip",
+            tooltipValueGetter: () => "Click to copy",
             cellRenderer: (params) => {
                 return (
                     <>
                         {
                             params.value && params.value != 'null' &&
-                            <p className='cursor-pointer' title='click to copy' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                            <p className='cursor-pointer' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
                         }
                     </>
                 );
@@ -86,7 +91,7 @@ const ShipmentStatusReport = () => {
                     <>
                         {
                             params.value && params.value != 'null' ?
-                              <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>Not Assigned</p>
+                                <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>Not Assigned</p>
                         }
                     </>
 
@@ -117,7 +122,7 @@ const ShipmentStatusReport = () => {
                     <>
                         {
                             params.value && params.value != 'null' ?
-                               <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>---.---.--</p>
+                                <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>---.---.--</p>
                         }
                     </>
 
@@ -169,7 +174,7 @@ const ShipmentStatusReport = () => {
                     <p className='my-2 font-semibold text-[#614119]'>Total:{shipmentStatusData?.length}</p>
                     <button
                         className="px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
-                        onClick={()=>ExportExcel(shipmentStatusData)}
+                        onClick={() => ExportExcel(shipmentStatusData)}
                     >
                         Export to Excel
                     </button>
@@ -198,6 +203,11 @@ const ShipmentStatusReport = () => {
                             }
                         }
                         return "";
+                    }}
+                    tooltipShowDelay={0}     // show instantly
+                    tooltipHideDelay={1000}  // auto hide in 2s
+                    components={{
+                        customTooltip: CustomTooltip,
                     }}
                     domLayout="autoHeight"
                     copyHeadersToClipboard={true}

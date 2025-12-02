@@ -3,6 +3,7 @@ import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useDispatch } from 'react-redux';
 import { setSelectedStylecodes } from '@/redux/slice';
+import CustomTooltip from './CustomTooltip';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -46,18 +47,22 @@ const AgGridTable = ({ rowData, searchResult, searchTerm }) => {
         {
             field: "Stylecode", headerName: 'Stylecode', flex: 1, minWidth: 200, wrapText: true,
             autoHeight: true,
+            tooltipComponent: "customTooltip",
+            tooltipValueGetter: () => "Click to copy",
             cellRenderer: (params) => {
                 return (
-                    <p className='cursor-pointer' title='click to copy' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                    <p className='cursor-pointer' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
                 );
             },
         },
-           {
+        {
             field: "Sku", headerName: 'Sku', flex: 1, minWidth: 100, wrapText: true,
             autoHeight: true,
+              tooltipComponent: "customTooltip",
+            tooltipValueGetter: () => "Click to copy",
             cellRenderer: (params) => {
                 return (
-                    <p className='cursor-pointer' title='click to copy' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                    <p className='cursor-pointer' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
                 );
             },
         },
@@ -128,9 +133,15 @@ const AgGridTable = ({ rowData, searchResult, searchTerm }) => {
                         const isSearched = searchResult?.some(p => p?.Sku === params?.data?.Sku);
                         const isEmpty = hasEmptyField(params.data);
 
-                        return (isSearched || isEmpty) ? isSearched ? "highlight-row" : isEmpty ? "highlight-red":'':'' ;
+                        return (isSearched || isEmpty) ? isSearched ? "highlight-row" : isEmpty ? "highlight-red" : '' : '';
                     }}
                     isRowSelectable={(node) => !hasEmptyField(node.data)}
+
+                    tooltipShowDelay={0}     // show instantly
+                    tooltipHideDelay={1000}  // auto hide in 2s
+                    components={{
+                        customTooltip: CustomTooltip,
+                    }}
                     defaultColDef={{
                         resizable: false,
                         sortable: false,

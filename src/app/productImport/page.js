@@ -131,6 +131,10 @@ const ProductImport = () => {
                 });
             const allStylecodes = await result?.data?.data;
             setSearchResult(allStylecodes)
+
+            if(allStylecodes?.length <= 0){
+             return toast.error('No data found!');
+            }
         } catch (err) {
             throw new Error(err)
         }

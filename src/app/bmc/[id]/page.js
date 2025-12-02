@@ -160,7 +160,7 @@ const BmcAgGridTable = () => {
             cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', borderRight: '1px solid #d3d3d3' }
           }}
           tooltipShowDelay={0}     // show instantly
-          tooltipHideDelay={2000}  // auto hide in 2s
+          tooltipHideDelay={1000}  // auto hide in 2s
           components={{
             customTooltip: CustomTooltip,
           }}

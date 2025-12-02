@@ -9,6 +9,7 @@ import Modal from './ReactModal';
 import ModalDetailsTable from './ModalTableData';
 import axios from 'axios';
 import { ExportExcel } from '@/utils';
+import CustomTooltip from './CustomTooltip';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -25,13 +26,23 @@ const ReportSgTable = () => {
     const closeModal = () => setShowModal(false);
 
     const [colDefs] = useState([
-        { field: "sku", headerName: "Sku", flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
         {
-            field: "StyleCode", headerName: 'Stylecode', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
-
+            field: "sku", headerName: "Sku", flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
+            tooltipComponent: "customTooltip",
+            tooltipValueGetter: () => "Click to copy",
             cellRenderer: (params) => {
                 return (
-                    <p className='cursor-pointer' title='click to copy' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                    <p className='cursor-pointer' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                );
+            },
+        },
+        {
+            field: "StyleCode", headerName: 'Stylecode', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
+            tooltipComponent: "customTooltip",
+            tooltipValueGetter: () => "Click to copy",
+            cellRenderer: (params) => {
+                return (
+                    <p className='cursor-pointer' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
                 );
             },
         },
@@ -77,7 +88,7 @@ const ReportSgTable = () => {
                 Stylecode: data?.StyleCode,
                 sku: data?.sku,
             }
-             const token = localStorage.getItem('mistoken')
+            const token = localStorage.getItem('mistoken')
             const response = await axios.post(`${BASE_URL}/api/checkstylecodeimport`, payload,
                 {
                     headers: {
@@ -105,7 +116,7 @@ const ReportSgTable = () => {
                     <p className='my-2 font-semibold text-[#614119]'>Stylecodes:{dataSg?.length}</p>
                     <button
                         className=" px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
-                       onClick={()=>ExportExcel(dataSg)}
+                        onClick={() => ExportExcel(dataSg)}
                     >
                         Export to Excel
                     </button>
@@ -124,9 +135,14 @@ const ReportSgTable = () => {
                         suppressMovable: true,
                         cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', borderRight: '1px solid #d3d3d3' }
                     }}
+                    tooltipShowDelay={0}
+                    tooltipHideDelay={2000}
+                    components={{
+                        customTooltip: CustomTooltip,
+                    }}
                     domLayout="autoHeight"
                     copyHeadersToClipboard={true}
-                      pagination={true}
+                    pagination={true}
                     paginationPageSize={50}
                     paginationPageSizeSelector={[20, 50, 100, 200]}
                 />
