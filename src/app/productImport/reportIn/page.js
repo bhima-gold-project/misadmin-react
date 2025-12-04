@@ -7,6 +7,8 @@ import { BASE_URL } from '../../../../constant';
 import { setImportedDataIn } from '../../../redux/slice';
 import axios from 'axios';
 import dynamic from "next/dynamic";
+import { toast } from 'react-toastify';
+import Loader from '@/components/Loader';
 
 const ReportInTable = dynamic(() => import("@/components/ReportIn"), {
   ssr: false,
@@ -21,6 +23,7 @@ const ReportIn = () => {
   const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
   const [searchTerm, setSearchTerm] = useState('')
   const [toggle, setToggle] = useState("imported");
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const handleStartChange = (e) => {
@@ -34,9 +37,9 @@ const ReportIn = () => {
   };
 
   const getReportsIn = async () => {
+    setIsLoading(true)
     try {
-
-      const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2`:`${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
+      const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2` : `${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
       const token = localStorage.getItem('mistoken')
       const response = await axios.get(apiUrl,
         {
@@ -50,6 +53,8 @@ const ReportIn = () => {
       dispatch(setImportedDataIn(result))
     } catch (err) {
       throw new Error(err)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -69,7 +74,12 @@ const ReportIn = () => {
         }
       );
       const result = await response?.data?.data
-      dispatch(setImportedDataIn(result))
+
+      if (result?.length > 0) {
+        dispatch(setImportedDataIn(result))
+      } else {
+        toast.warn('Data Not Found !')
+      }
     } catch (err) {
       throw new Error(err)
     }
@@ -161,8 +171,8 @@ const ReportIn = () => {
           </div>
         </div>
       </div>
-      <div >
-        <ReportInTable />
+      <div>
+        {isLoading ? <Loader/>:<ReportInTable />}
       </div>
     </div>
 

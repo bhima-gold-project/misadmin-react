@@ -8,6 +8,7 @@ import { BASE_URL } from '../../../../constant';
 import { setDeliveryStatusData } from '../../../redux/slice';
 import { useDispatch } from 'react-redux';
 import ShipmentStatusReport from '@/components/ShipmentStatusReport';
+import Loader from '@/components/Loader';
 
 const ShipmentStatus = () => {
     const today = new Date();
@@ -17,6 +18,7 @@ const ShipmentStatus = () => {
     const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
     const [searchTerm, setSearchTerm] = useState('')
     const [searchOder, setSearchOder] = useState('')
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleStartChange = (e) => {
         const selected = startOfDay(new Date(e.target.value));
@@ -29,6 +31,7 @@ const ShipmentStatus = () => {
     };
 
     const getShipmentStatus = async () => {
+        setIsLoading(true)
         try {
              const token = localStorage.getItem('mistoken')
             const response = await axios.get(`${BASE_URL}/api/shipmentStatus?fromDate=${fromDate}&toDate=${toDate}`,
@@ -43,6 +46,8 @@ const ShipmentStatus = () => {
             dispatch(setDeliveryStatusData(result))
         } catch (err) {
             throw new Error(err)
+        }finally{
+            setIsLoading(false)
         }
     }
 
@@ -50,6 +55,7 @@ const ShipmentStatus = () => {
         if (searchTerm === '') return;
          const token = localStorage.getItem('mistoken')
         try {
+            setIsLoading(true)
             const response = await axios.get(`${BASE_URL}/api/searchStatus?search=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}`,
                 {
                     headers: {
@@ -62,6 +68,8 @@ const ShipmentStatus = () => {
             dispatch(setDeliveryStatusData(result))
         } catch (err) {
             throw new Error(err)
+        }finally{
+            setIsLoading(false)
         }
     }
 
@@ -160,7 +168,7 @@ const ShipmentStatus = () => {
                 </div>
             </div>
             <div>
-                <ShipmentStatusReport />
+                  {isLoading ? <Loader/>:<ShipmentStatusReport />}
             </div>
         </div>
     )

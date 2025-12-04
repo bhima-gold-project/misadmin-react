@@ -55,7 +55,7 @@ const BmcAgGridTable = () => {
       cellRenderer: (params) => {
         return (<>
           {
-            params.value && params.value != 'null' ? <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>---.---.--</p>
+            params.value && params.value != 'null' ? <p>{new Date(params.value).toLocaleDateString("en-IN")}</p> : <p>---.---.--</p>
           }
         </>)
       },

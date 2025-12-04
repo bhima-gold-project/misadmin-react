@@ -7,6 +7,7 @@ import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
 import { BASE_URL } from '../../../../constant';
 import dynamic from "next/dynamic";
+import Loader from '@/components/Loader';
 
 const ReportSgTable = dynamic(() => import("@/components/ReportSg"), {
   ssr: false,
@@ -21,6 +22,7 @@ const ReportSg = () => {
   const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
   const [searchTerm, setSearchTerm] = useState('')
   const [toggle, setToggle] = useState("imported");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -33,9 +35,10 @@ const ReportSg = () => {
   };
 
   const getReportsSg = async () => {
+    setIsLoading(true)
     try {
-       const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedProducts?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2`:`${BASE_URL}/api/importedProducts?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
-       const token = localStorage.getItem('mistoken')
+      const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedProducts?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2` : `${BASE_URL}/api/importedProducts?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
+      const token = localStorage.getItem('mistoken')
       const response = await axios.get(apiUrl,
         {
           headers: {
@@ -48,6 +51,8 @@ const ReportSg = () => {
       dispatch(setImportedDataSg(result))
     } catch (err) {
       throw new Error(err)
+    }finally{
+      setIsLoading(false)
     }
   }
 
@@ -57,7 +62,7 @@ const ReportSg = () => {
         getReportsSg()
         return
       }
-       const token = localStorage.getItem('mistoken')
+      const token = localStorage.getItem('mistoken')
       const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-SG`,
         {
           headers: {
@@ -67,7 +72,11 @@ const ReportSg = () => {
         }
       );
       const result = await response?.data?.data
-      dispatch(setImportedDataSg(result))
+      if (result?.length > 0) {
+        dispatch(setImportedDataSg(result))
+      } else {
+        toast.warn('Data Not Found !')
+      }
     } catch (err) {
       throw new Error(err)
     }
@@ -75,12 +84,12 @@ const ReportSg = () => {
 
   useEffect(() => {
     getReportsSg()
-  }, [fromDate, toDate,toggle]);
+  }, [fromDate, toDate, toggle]);
 
   return (
     <div className="min-h-screen">
       <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Report-SG</h1>
-     <div className='flex flex-col xl:flex-row xl:justify-between xl:items-center lg:flex-row lg:items-center lg:justify-between 
+      <div className='flex flex-col xl:flex-row xl:justify-between xl:items-center lg:flex-row lg:items-center lg:justify-between 
       md:flex-row md:items-center md:justify-between gap-x-4'>
         <div className="flex gap-4 items-center  ">
           <div className=" max-w-[300px] w-full">
@@ -108,7 +117,7 @@ const ReportSg = () => {
           </div>
         </div>
 
-           <div className="flex gap-6 items-center">
+        <div className="flex gap-6 items-center">
           {/* Imported Stylecode */}
           <label
             className="flex items-center gap-2 cursor-pointer text-gray-700"
@@ -156,8 +165,8 @@ const ReportSg = () => {
           </div>
         </div>
       </div>
-      <div >
-        <ReportSgTable />
+      <div>
+      {isLoading ? <Loader/>:<ReportSgTable />}
       </div>
     </div>
 

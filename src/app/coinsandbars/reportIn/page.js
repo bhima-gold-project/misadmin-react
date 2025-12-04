@@ -7,6 +7,7 @@ import { BASE_URL } from '../../../../constant';
 import { setImportedDataIn } from '../../../redux/slice';
 import axios from 'axios';
 import dynamic from "next/dynamic";
+import Loader from '@/components/Loader';
 
 const ReportInTable = dynamic(() => import("@/components/ReportIn"), {
   ssr: false,
@@ -20,6 +21,7 @@ const CoinsReportIn = () => {
   const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
   const [searchTerm, setSearchTerm] = useState('')
   const [toggle, setToggle] = useState("imported");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -32,6 +34,7 @@ const CoinsReportIn = () => {
   };
 
   const getReportsIn = async () => {
+    setIsLoading(true)
     try {
       const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedCoins?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2`:`${BASE_URL}/api/importedCoins?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
        const token = localStorage.getItem('mistoken')
@@ -47,6 +50,8 @@ const CoinsReportIn = () => {
       dispatch(setImportedDataIn(result))
     } catch (err) {
       throw new Error(err)
+    }finally{
+        setIsLoading(false)
     }
   }
 
@@ -157,7 +162,7 @@ const CoinsReportIn = () => {
         </div>
       </div>
       <div >
-        <ReportInTable />
+          {isLoading ? <Loader/>:<ReportInTable />}
       </div>
     </div>
 

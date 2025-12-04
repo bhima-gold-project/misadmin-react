@@ -7,6 +7,7 @@ import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
 import { BASE_URL } from '../../../../constant';
 import dynamic from "next/dynamic";
+import Loader from '@/components/Loader';
 
 const ReportSgTable = dynamic(() => import("@/components/ReportSg"), {
   ssr: false,
@@ -20,6 +21,7 @@ const CoinsReportSg = () => {
   const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
   const [searchTerm, setSearchTerm] = useState('')
   const [toggle, setToggle] = useState("imported");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -32,6 +34,7 @@ const CoinsReportSg = () => {
   };
 
   const getReportsSg = async () => {
+     setIsLoading(true)
     try {
       const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedCoins?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2` : `${BASE_URL}/api/importedCoins?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
       const token = localStorage.getItem('mistoken')
@@ -45,6 +48,8 @@ const CoinsReportSg = () => {
       dispatch(setImportedDataSg(result))
     } catch (err) {
       throw new Error(err)
+    }finally{
+       setIsLoading(false)
     }
   }
 
@@ -151,8 +156,8 @@ const CoinsReportSg = () => {
           </div>
         </div>
       </div>
-      <div >
-        <ReportSgTable />
+      <div>
+          {isLoading ? <Loader/>:<ReportSgTable />}
       </div>
     </div>
 
