@@ -66,7 +66,7 @@ const ProductImport = () => {
                 { stylecodes: excelData },
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,   // <-- your token here
+                        Authorization: `Bearer ${token}`,   
                         "Content-Type": "application/json"
                     }
                 }
@@ -94,7 +94,7 @@ const ProductImport = () => {
                  { jsonPayload: selectedStylecodes },
                  {
                     headers: {
-                        Authorization: `Bearer ${token}`,   // <-- your token here
+                        Authorization: `Bearer ${token}`,  
                         "Content-Type": "application/json"
                     }
                 }

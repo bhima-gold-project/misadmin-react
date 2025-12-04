@@ -33,7 +33,7 @@ const ShipmentStatus = () => {
     const getShipmentStatus = async () => {
         setIsLoading(true)
         try {
-             const token = localStorage.getItem('mistoken')
+            const token = localStorage.getItem('mistoken')
             const response = await axios.get(`${BASE_URL}/api/shipmentStatus?fromDate=${fromDate}&toDate=${toDate}`,
                 {
                     headers: {
@@ -46,14 +46,14 @@ const ShipmentStatus = () => {
             dispatch(setDeliveryStatusData(result))
         } catch (err) {
             throw new Error(err)
-        }finally{
+        } finally {
             setIsLoading(false)
         }
     }
 
     const search = async () => {
         if (searchTerm === '') return;
-         const token = localStorage.getItem('mistoken')
+        const token = localStorage.getItem('mistoken')
         try {
             setIsLoading(true)
             const response = await axios.get(`${BASE_URL}/api/searchStatus?search=${searchTerm}&fromDate=${fromDate}&toDate=${toDate}`,
@@ -68,14 +68,14 @@ const ShipmentStatus = () => {
             dispatch(setDeliveryStatusData(result))
         } catch (err) {
             throw new Error(err)
-        }finally{
+        } finally {
             setIsLoading(false)
         }
     }
 
-        const searchOders = async () => {
+    const searchOders = async () => {
         if (searchOder === '') return;
-         const token = localStorage.getItem('mistoken')
+        const token = localStorage.getItem('mistoken')
         try {
             const response = await axios.get(`${BASE_URL}/api/search?search=${searchOder}`,
                 {
@@ -94,6 +94,7 @@ const ShipmentStatus = () => {
 
     useEffect(() => {
         getShipmentStatus()
+        setSearchTerm('');
     }, [fromDate, toDate])
 
     useEffect(() => {
@@ -137,6 +138,7 @@ const ShipmentStatus = () => {
                     <div className='w-full max-w-[300px] lg:min-w-[200px]'>
                         <label className="block text-sm font-semibold text-[#c7a44d]">Select</label>
                         <select
+                          value={searchTerm}
                             onChange={(e) => {
                                 setSearchTerm(e.target.value);
                                 if (e.target.value === '') {
@@ -168,7 +170,7 @@ const ShipmentStatus = () => {
                 </div>
             </div>
             <div>
-                  {isLoading ? <Loader/>:<ShipmentStatusReport />}
+                {isLoading ? <Loader /> : <ShipmentStatusReport />}
             </div>
         </div>
     )
