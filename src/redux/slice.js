@@ -5,6 +5,7 @@ const initialState = {
   importDataIn: [],
   importDataSg: [],
   deliveryStatusData: [],
+  productAttrs:[]
 };
 
 const sliceData = createSlice({
@@ -23,9 +24,12 @@ const sliceData = createSlice({
     setDeliveryStatusData: (state, action) => {
       state.deliveryStatusData = action.payload;
     },
+      setProductAttrs: (state, action) => {
+      state.productAttrs = action.payload;
+    },
   },
 });
 
-export const { setSelectedStylecodes, setDeliveryStatusData, setImportedDataIn, setImportedDataSg } = sliceData.actions;
+export const { setSelectedStylecodes, setDeliveryStatusData, setImportedDataIn, setImportedDataSg,setProductAttrs } = sliceData.actions;
 
 export default sliceData.reducer;

@@ -31,7 +31,7 @@ const ShipmentStatusReport = () => {
             tooltipValueGetter: () => "Click to copy",
             cellRenderer: (params) => {
                 return (
-                    <p className='cursor-pointer'  onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                    <p className='cursor-pointer' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
                 );
             },
         },
@@ -74,24 +74,13 @@ const ShipmentStatusReport = () => {
             },
         },
         {
-            field: "TranName", headerName: 'Status', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
-            headerClass: 'ag-left-aligned-header',
-            cellRenderer: (params) => {
-                return (
-                    <p className={` font-semibold 'text-yellow-700'} `}>
-                        {params.value}
-                    </p>
-                );
-            },
-        },
-        {
             field: "ShippedOn", headerName: 'Shipped On', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, headerClass: 'ag-left-aligned-header',
             cellRenderer: (params) => {
                 return (
                     <>
                         {
                             params.value && params.value != 'null' ?
-                                <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>Not Assigned</p>
+                                <p>{new Date(params.value).toLocaleDateString("en-IN")}</p> : <p>Not Assigned</p>
                         }
                     </>
 
@@ -113,23 +102,6 @@ const ShipmentStatusReport = () => {
                 );
             },
         },
-
-        {
-            field: "DeliveredOn", headerName: 'Delivered On', flex: 1, minWidth: 100, wrapText: true,
-            autoHeight: true, headerClass: 'ag-left-aligned-header',
-            cellRenderer: (params) => {
-                return (
-                    <>
-                        {
-                            params.value && params.value != 'null' ?
-                                <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>---.---.--</p>
-                        }
-                    </>
-
-                );
-            },
-        },
-
         {
             field: "estiimated_delivery", headerName: 'Estimated Delivery', flex: 1, minWidth: 100, wrapText: true,
             autoHeight: true, headerClass: 'ag-left-aligned-header',
@@ -138,14 +110,29 @@ const ShipmentStatusReport = () => {
                     <>
                         {
                             params.value && params.value != 'null' ?
-                                <p>{params.value.slice(0, 16).replace("T", " ")}</p> : <p>---.---.--</p>
+                                <p>{new Date(params.value).toLocaleDateString("en-IN")}</p> : <p>---.---.--</p>
                         }
                     </>
 
                 );
             },
         },
+        {
+            field: "DeliveredOn", headerName: 'Delivered On', flex: 1, minWidth: 100, wrapText: true,
+            autoHeight: true, headerClass: 'ag-left-aligned-header',
+            cellRenderer: (params) => {
+                return (
+                    <>
+                        {
+                            params.value && params.value != 'null' ?
+                            
+                                <p>{new Date(params.value).toLocaleDateString("en-IN")}</p> : <p>---.---.--</p>
+                        }
+                    </>
 
+                );
+            },
+        },
         {
             field: "action",
             headerName: 'Action',
@@ -193,10 +180,9 @@ const ShipmentStatusReport = () => {
                         cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'start', fontSize: '12px', borderRight: '1px solid #d3d3d3', }
                     }}
                     getRowClass={(params) => {
-                        const delivered = params.data?.DeliveredOn;
                         const estimated = params.data?.estiimated_delivery;
-                        if (delivered && estimated) {
-                            const deliveredDate = new Date(delivered);
+                        if (estimated) {
+                            const deliveredDate = new Date();
                             const estimatedDate = new Date(estimated);
                             if (deliveredDate > estimatedDate) {
                                 return "late-delivery-row";
@@ -244,6 +230,9 @@ const ShipmentStatusReport = () => {
                                         toast.success('AW No. copied to clipboard!');
 
                                     }}><MdContentCopy /></span></p>
+                            </div>
+                            <div>
+                                <p className='font-semibold'>Order Date :&nbsp;<span className='font-medium capitalize'>{modalData?.order_date ? new Date(modalData.order_date).toLocaleDateString("en-IN") : "N/A"}</span></p>
                             </div>
                             <div>
                                 <p className='font-semibold'>Logistic Partner : <span className='font-medium'> {modalData?.logisticPartner && modalData?.logisticPartner != 'null' ? modalData?.logisticPartner : 'Not Assigned'}</span></p>

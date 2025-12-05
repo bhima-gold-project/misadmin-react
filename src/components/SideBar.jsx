@@ -51,6 +51,10 @@ export default function Sidebar() {
         { title: "Bmc Summary", path: "/bmc" },
       ],
     },
+    // {
+    //   title: "Product Attrs Update",
+    //   path: "/productAttrsUpdate",
+    // },
   ];
 
   // ⬇️ Recursive menu rendering
@@ -99,11 +103,11 @@ export default function Sidebar() {
 
   const LogOut = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/users/mis-logout`,{},{ withCredentials: true });
+      const response = await axios.post(`${BASE_URL}/api/users/mis-logout`, {}, { withCredentials: true });
       if (response?.data?.success) {
         localStorage.removeItem('mistoken')
         toast.success(response?.data?.message);
-       window.location.href = "/login?clear=1";
+        window.location.href = "/login?clear=1";
       }
     } catch (err) {
       throw err;
@@ -130,6 +134,6 @@ export default function Sidebar() {
         <span>Logout</span>
       </div>
     </aside>
-    
+
   );
 }

@@ -7,7 +7,7 @@ export async function middleware(req) {
   const token = req.cookies.get("token")?.value || null;
   const path = req.nextUrl.pathname;
 
-  const protectedPrefixes = ["/", "/productImport", "/orders", "/bmc"];
+  const protectedPrefixes = ["/", "/productImport", "/orders", "/bmc","/productAttrsUpdate"];
 
   const isProtected = protectedPrefixes.some(prefix =>
     path === prefix || path.startsWith(prefix + "/")
