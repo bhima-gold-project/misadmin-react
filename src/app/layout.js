@@ -13,7 +13,7 @@ const nunito = Nunito_Sans({
 });
 
 export const metadata = {
-  title: "MIS ADMIN",
+  title: "BG ADMIN",
   description: "The clear insights your business needs to achieve true brilliance.",
 };
 

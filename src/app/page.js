@@ -19,7 +19,7 @@ export default function Home() {
             />
           </div>
           <h1 className="lg:text-4xl text-2xl font-bold text-center " style={{ color: "#614119" }}>
-            Magna MIS Insight
+            Bhima Gold Admin Pannel
           </h1>
           <p className='text-center text-base lg:text-xl '>The clear insights your business needs to achieve true brilliance.</p>
         </div>
