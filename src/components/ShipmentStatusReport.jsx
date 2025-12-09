@@ -181,8 +181,9 @@ const ShipmentStatusReport = () => {
                     }}
                     getRowClass={(params) => {
                         const estimated = params.data?.estiimated_delivery;
+                        const deliveredOn = params.data?.DeliveredOn;
                         if (estimated) {
-                            const deliveredDate = new Date();
+                            const deliveredDate = new Date(deliveredOn);
                             const estimatedDate = new Date(estimated);
                             if (deliveredDate > estimatedDate) {
                                 return "late-delivery-row";
