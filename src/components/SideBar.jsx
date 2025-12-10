@@ -28,13 +28,24 @@ export default function Sidebar() {
       title: "Product Import",
       children: [
         { title: "Import Products", path: "/productImport" },
-        { title: "Report IN", path: "/productImport/reportIn" },
-        { title: "Report SG", path: "/productImport/reportSg" },
+        {
+          title: "Products",
+          children: [
+            { title: "Report IN", path: "/products/reportIn" },
+            { title: "Report SG", path: "/products/reportSg" },
+          ],
+        },
         {
           title: "Coins & Bars",
           children: [
-            { title: "Import Report IN", path: "/coinsandbars/reportIn" },
-            { title: "Import Report SG", path: "/coinsandbars/reportSg" },
+            { title: "Report IN", path: "/coinsandbars/reportIn" },
+            { title: "Report SG", path: "/coinsandbars/reportSg" },
+          ],
+        },
+        {
+          title: "Stones",
+          children: [
+            { title: "Report IN", path: "/stones/reportIn" },
           ],
         },
       ],
@@ -117,7 +128,7 @@ export default function Sidebar() {
   return (
     <aside className="h-full w-full bg-[#8a5a20] text-white shadow-lg p-4 flex flex-col">
       <div className="flex items-center justify-between mb-5 ">
-        <div className="lg:text-2xl text-lg font-bold">MIS ADMIN</div>
+        <div className="lg:text-2xl text-lg font-bold">BG ADMIN</div>
       </div>
 
       {/* Menu items */}

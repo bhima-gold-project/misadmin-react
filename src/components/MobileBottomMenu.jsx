@@ -24,8 +24,8 @@ function MobileBottomMenu() {
       title: "Product Import",
       children: [
         { title: "Import Products", path: "/productImport" },
-        { title: "Report IN", path: "/productImport/reportIn" },
-        { title: "Report SG", path: "/productImport/reportSg" },
+        { title: "Report IN", path: "/products/reportIn" },
+        { title: "Report SG", path: "/products/reportSg" },
       ],
     },
     {
@@ -42,7 +42,7 @@ function MobileBottomMenu() {
       ],
     },
 
-     {
+    {
       title: "BMC Reports",
       children: [
         { title: "Bmc Summary", path: "/bmc" },
@@ -52,7 +52,7 @@ function MobileBottomMenu() {
 
   const LogOut = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/users/mis-logout`,{},{ withCredentials: true });
+      const response = await axios.post(`${BASE_URL}/api/users/mis-logout`, {}, { withCredentials: true });
       if (response?.data?.success) {
         localStorage.removeItem('mistoken')
         toast.success(response?.data?.message);

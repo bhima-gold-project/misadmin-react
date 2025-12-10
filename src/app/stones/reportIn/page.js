@@ -39,7 +39,7 @@ const ReportIn = () => {
   const getReportsIn = async () => {
     setIsLoading(true)
     try {
-      const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2` : `${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
+      const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedStones?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2` : `${BASE_URL}/api/importedStones?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
       const token = localStorage.getItem('mistoken')
       const response = await axios.get(apiUrl,
         {
@@ -65,7 +65,7 @@ const ReportIn = () => {
         return
       }
       const token = localStorage.getItem('mistoken')
-      const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-IN`,
+      const response = await axios.get(`${BASE_URL}/api/searchcoinsreport?searchTerm=${searchTerm}&locale=en-IN`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -92,7 +92,7 @@ const ReportIn = () => {
 
   return (
     <div className="min-h-screen">
-      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Report-IN</h1>
+      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Stones Report-IN</h1>
 
       <div className='flex flex-col xl:flex-row xl:justify-between xl:items-center lg:flex-row lg:items-center lg:justify-between 
       md:flex-row md:items-center md:justify-between gap-x-4'>
@@ -172,7 +172,7 @@ const ReportIn = () => {
         </div>
       </div>
       <div>
-        {isLoading ? <Loader/>:<ReportInTable />}
+        {isLoading ? <Loader/>:<ReportInTable title={'stones'}/>}
       </div>
     </div>
 

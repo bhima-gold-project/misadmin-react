@@ -13,8 +13,7 @@ import CustomTooltip from './CustomTooltip';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const ReportInTable = () => {
-
+const ReportInTable = ({title}) => {
     const dataIn = useSelector((state) => state?.products?.importDataIn);
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState([]);
@@ -85,10 +84,10 @@ const ReportInTable = () => {
     const checkStylecodeData = async (data) => {
         try {
             setStyleCode(data?.StyleCode)
-
             const payload = {
                 Stylecode: data?.StyleCode,
                 sku: data?.sku,
+                title:title
             }
             const token = localStorage.getItem('mistoken');
             const response = await axios.post(`${BASE_URL}/api/checkstylecodeimport`, payload, {
@@ -103,7 +102,6 @@ const ReportInTable = () => {
             throw new Error(err)
         }
     }
-
 
     return (
         <div className="ag-theme-alpine w-full overflow-x-auto">

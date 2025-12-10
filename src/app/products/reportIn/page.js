@@ -7,13 +7,14 @@ import { BASE_URL } from '../../../../constant';
 import { setImportedDataIn } from '../../../redux/slice';
 import axios from 'axios';
 import dynamic from "next/dynamic";
+import { toast } from 'react-toastify';
 import Loader from '@/components/Loader';
 
 const ReportInTable = dynamic(() => import("@/components/ReportIn"), {
   ssr: false,
 });
 
-const CoinsReportIn = () => {
+const ReportIn = () => {
   const today = new Date();
   const dispatch = useDispatch();
 
@@ -22,6 +23,7 @@ const CoinsReportIn = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [toggle, setToggle] = useState("imported");
   const [isLoading, setIsLoading] = useState(false);
+
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -36,8 +38,8 @@ const CoinsReportIn = () => {
   const getReportsIn = async () => {
     setIsLoading(true)
     try {
-      const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedCoins?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2`:`${BASE_URL}/api/importedCoins?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
-       const token = localStorage.getItem('mistoken')
+      const apiUrl = toggle == 'imported' ? `${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=2` : `${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}&ProdPushed=0`
+      const token = localStorage.getItem('mistoken')
       const response = await axios.get(apiUrl,
         {
           headers: {
@@ -50,8 +52,8 @@ const CoinsReportIn = () => {
       dispatch(setImportedDataIn(result))
     } catch (err) {
       throw new Error(err)
-    }finally{
-        setIsLoading(false)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -61,7 +63,7 @@ const CoinsReportIn = () => {
         getReportsIn()
         return
       }
-     const token = localStorage.getItem('mistoken')
+      const token = localStorage.getItem('mistoken')
       const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-IN`,
         {
           headers: {
@@ -71,7 +73,12 @@ const CoinsReportIn = () => {
         }
       );
       const result = await response?.data?.data
-      dispatch(setImportedDataIn(result))
+
+      if (result?.length > 0) {
+        dispatch(setImportedDataIn(result))
+      } else {
+        toast.warn('Data Not Found !')
+      }
     } catch (err) {
       throw new Error(err)
     }
@@ -81,11 +88,12 @@ const CoinsReportIn = () => {
     getReportsIn()
   }, [fromDate, toDate,toggle]);
 
+
   return (
     <div className="min-h-screen">
-      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Coins Report-IN</h1>
+      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Report-IN</h1>
 
-    <div className='flex flex-col xl:flex-row xl:justify-between xl:items-center lg:flex-row lg:items-center lg:justify-between 
+      <div className='flex flex-col xl:flex-row xl:justify-between xl:items-center lg:flex-row lg:items-center lg:justify-between 
       md:flex-row md:items-center md:justify-between gap-x-4'>
         <div className="flex gap-4 items-center ">
           <div className=" max-w-[300px] w-full">
@@ -113,7 +121,7 @@ const CoinsReportIn = () => {
           </div>
         </div>
 
-          <div className="flex gap-6 items-center">
+        <div className="flex gap-6 items-center">
           {/* Imported Stylecode */}
           <label
             className="flex items-center gap-2 cursor-pointer text-gray-700"
@@ -145,6 +153,7 @@ const CoinsReportIn = () => {
           </label>
         </div>
 
+
         <div className='w-full max-w-[250px]'>
           <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>
           <div className='flex flex-row justify-end items-center gap-2 '>
@@ -161,12 +170,12 @@ const CoinsReportIn = () => {
           </div>
         </div>
       </div>
-      <div >
-          {isLoading ? <Loader/>:<ReportInTable title={'coins'} />}
+      <div>
+        {isLoading ? <Loader/>:<ReportInTable title={'products'}/>}
       </div>
     </div>
 
   )
 }
 
-export default CoinsReportIn
+export default ReportIn

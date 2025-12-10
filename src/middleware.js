@@ -7,7 +7,7 @@ export async function middleware(req) {
   const token = req.cookies.get("token")?.value || null;
   const path = req.nextUrl.pathname;
 
-  const protectedPrefixes = ["/", "/productImport", "/orders", "/bmc","/productAttrsUpdate"];
+  const protectedPrefixes = ["/", "/productImport","/products", "/orders", "/bmc","/productAttrsUpdate"];
 
   const isProtected = protectedPrefixes.some(prefix =>
     path === prefix || path.startsWith(prefix + "/")
@@ -17,7 +17,6 @@ export async function middleware(req) {
     if (!token) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
-
     try {
       const verified = await jwtVerify(token, SECRET);
       const role = verified.payload.role;
@@ -31,10 +30,10 @@ export async function middleware(req) {
 
       // PRODUCT USER
       if (role === "product") {
-        if (!path.startsWith("/productImport")) {
-          return NextResponse.redirect(new URL("/unauthorized", req.url));
+        if (path.startsWith("/productImport") || path.startsWith("/products") || path.startsWith("/coinsandbars")) {
+          return NextResponse.next();
         }
-        const res = NextResponse.next();
+        const res = NextResponse.redirect(new URL("/unauthorized", req.url));
         res.headers.set("x-middleware-cache", "no-cache");
         return res;
       }
