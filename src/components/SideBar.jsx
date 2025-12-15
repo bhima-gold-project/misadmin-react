@@ -51,9 +51,9 @@ export default function Sidebar() {
       ],
     },
     {
-      title: "Order Reports",
+      title: "Shipment Reports",
       children: [
-        { title: "Shipment Status Report", path: "/orders/shipmentStatusReport" },
+        { title: "Shipment Summary", path: "/shipments" },
       ],
     },
     {

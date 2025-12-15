@@ -36,7 +36,22 @@ const ShipmentStatusReport = () => {
             },
         },
         { field: "Orderrefno", headerName: 'OrderRef No.', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, headerClass: 'ag-left-aligned-header', },
-
+        {
+            field: "TranName", headerName: 'Status', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, headerClass: 'ag-left-aligned-header',
+            cellRenderer: (params) => {
+                if (params.data.isShipped == "1") {
+                    return <p>SHIPPED</p>;
+                }
+                return (
+                    <>
+                        {
+                            params.value && params.value != 'null' &&
+                            <p className='cursor-pointer'>{params?.value}</p>
+                        }
+                    </>
+                );
+            },
+        },
         {
             field: "AwNo",
             headerName: 'Aw Billno',
@@ -48,6 +63,9 @@ const ShipmentStatusReport = () => {
             tooltipComponent: "customTooltip",
             tooltipValueGetter: () => "Click to copy",
             cellRenderer: (params) => {
+                if (params.data.TranName === "COUNTER_DELIVERY") {
+                    return <p>N/A</p>;
+                }
                 return (
                     <>
                         {
@@ -60,22 +78,29 @@ const ShipmentStatusReport = () => {
         },
 
         {
-            field: "logisticPartner", headerName: 'Logistics', flex: 1, minWidth: 100, wrapText: true,
-            autoHeight: true, headerClass: 'ag-left-aligned-header',
+            field: "logisticPartner",
+            headerName: "Logistics",
+            flex: 1,
+            minWidth: 100,
+            wrapText: true,
+            autoHeight: true,
+            headerClass: "ag-left-aligned-header",
             cellRenderer: (params) => {
-                return (
-                    <>
-                        {
-                            params.value && params.value != 'null' ?
-                                <p>{params.value}</p> : <p>Not Assigned</p>
-                        }
-                    </>
-                );
+                if (params.data.TranName === "COUNTER_DELIVERY") {
+                    return <p>N/A</p>;  // Hide or show dash
+                }
+
+                return params.value && params.value !== "null"
+                    ? <p>{params.value}</p>
+                    : <p>Not Assigned</p>;
             },
         },
         {
             field: "ShippedOn", headerName: 'Shipped On', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, headerClass: 'ag-left-aligned-header',
             cellRenderer: (params) => {
+                if (params.data.TranName === "COUNTER_DELIVERY") {
+                    return <p>N/A</p>;
+                }
                 return (
                     <>
                         {
@@ -91,6 +116,7 @@ const ShipmentStatusReport = () => {
         {
             field: "Delivered_Message", headerName: 'Message  ', flex: 1, minWidth: 100, wrapText: true,
             autoHeight: true, headerClass: 'ag-left-aligned-header',
+
             cellRenderer: (params) => {
                 return (
                     <>
@@ -125,7 +151,7 @@ const ShipmentStatusReport = () => {
                     <>
                         {
                             params.value && params.value != 'null' ?
-                            
+
                                 <p>{new Date(params.value).toLocaleDateString("en-IN")}</p> : <p>---.---.--</p>
                         }
                     </>
@@ -200,7 +226,7 @@ const ShipmentStatusReport = () => {
                     copyHeadersToClipboard={true}
                     pagination={true}
                     paginationPageSize={20}
-                    paginationPageSizeSelector={[20, 50, 100, 200]}
+                    paginationPageSizeSelector={[20, 50, 100, 200, 400, 800, 1000]}
                 />
             </div>
             <div>
@@ -224,20 +250,27 @@ const ShipmentStatusReport = () => {
 
                                     }}><MdContentCopy /></span></p>
                             </div>
-                            <div>
-                                <p className='font-semibold flex items-center gap-x-2'>Aw Billno: <Link href={track_url}
-                                    target="_blank" rel="noopener noreferrer" className='text-blue-500 underline'>{modalData?.AwNo}</Link> <span className='cursor-pointer' onClick={() => {
-                                        navigator.clipboard.writeText(modalData?.AwNo);
-                                        toast.success('AW No. copied to clipboard!');
+                            {
+                                modalData?.AwNo &&
+                                <div>
+                                    <p className='font-semibold flex items-center gap-x-2'>Aw Billno: <Link href={track_url}
+                                        target="_blank" rel="noopener noreferrer" className='text-blue-500 underline'>{modalData?.AwNo}</Link> <span className='cursor-pointer' onClick={() => {
+                                            navigator.clipboard.writeText(modalData?.AwNo);
+                                            toast.success('AW No. copied to clipboard!');
 
-                                    }}><MdContentCopy /></span></p>
-                            </div>
+                                        }}><MdContentCopy /></span></p>
+                                </div>
+                            }
+
                             <div>
                                 <p className='font-semibold'>Order Date :&nbsp;<span className='font-medium capitalize'>{modalData?.order_date ? new Date(modalData.order_date).toLocaleDateString("en-IN") : "N/A"}</span></p>
                             </div>
-                            <div>
-                                <p className='font-semibold'>Logistic Partner : <span className='font-medium'> {modalData?.logisticPartner && modalData?.logisticPartner != 'null' ? modalData?.logisticPartner : 'Not Assigned'}</span></p>
-                            </div>
+                            {
+                                modalData?.logisticPartner &&
+                                <div>
+                                    <p className='font-semibold'>Logistic Partner : <span className='font-medium'> {modalData?.logisticPartner && modalData?.logisticPartner != 'null' ? modalData?.logisticPartner : 'Not Assigned'}</span></p>
+                                </div>
+                            }
 
                             <div>
                                 <p className='font-semibold'>Mobile No :&nbsp;<span className='font-medium'>{modalData?.mobile_no}</span></p>
@@ -247,9 +280,9 @@ const ShipmentStatusReport = () => {
                                 <p className='font-semibold'>Customer Name :&nbsp;<span className='font-medium capitalize'>{modalData?.cust_name}</span></p>
                             </div>
 
-                            <div>
+                           {modalData?.ShippingCity && <div>
                                 <p className='font-semibold'>Shipping City :&nbsp;<span className='font-medium capitalize'>{modalData?.ShippingCity}</span></p>
-                            </div>
+                            </div>}
                         </div>
                     </Modal>
                 )}

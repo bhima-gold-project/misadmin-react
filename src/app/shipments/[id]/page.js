@@ -9,13 +9,21 @@ import { setDeliveryStatusData } from '../../../redux/slice';
 import { useDispatch } from 'react-redux';
 import ShipmentStatusReport from '@/components/ShipmentStatusReport';
 import Loader from '@/components/Loader';
+import { useParams, useSearchParams } from 'next/navigation'
 
-const ShipmentStatus = () => {
-    const today = new Date();
+const ShipmentViews = () => {
+    const searchParam = useSearchParams()
+    const { id } = useParams()
+    const title = decodeURIComponent(id);
     const dispatch = useDispatch();
 
-    const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
-    const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
+    const paramsValue = {
+        fromDate: searchParam.get("fromDate"),
+        toDate: searchParam.get("toDate"),
+    }
+
+    const [fromDate, setFromDate] = useState(format(paramsValue?.fromDate, "yyyy-MM-dd"));
+    const [toDate, setToDate] = useState(format(paramsValue?.toDate, "yyyy-MM-dd"));
     const [searchTerm, setSearchTerm] = useState('')
     const [searchOder, setSearchOder] = useState('')
     const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +42,7 @@ const ShipmentStatus = () => {
         setIsLoading(true)
         try {
             const token = localStorage.getItem('mistoken')
-            const response = await axios.get(`${BASE_URL}/api/shipmentStatus?fromDate=${fromDate}&toDate=${toDate}`,
+            const response = await axios.get(`${BASE_URL}/api/shipmentStatus?fromDate=${fromDate}&toDate=${toDate}&title=${title}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -77,7 +85,7 @@ const ShipmentStatus = () => {
         if (searchOder === '') return;
         const token = localStorage.getItem('mistoken')
         try {
-            const response = await axios.get(`${BASE_URL}/api/search?search=${searchOder}`,
+            const response = await axios.get(`${BASE_URL}/api/search?search=${searchOder}&title=${title}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -104,7 +112,7 @@ const ShipmentStatus = () => {
 
     return (
         <div className="min-h-screen">
-            <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Shipment Status Report</h1>
+            <h1 className='text-center text-2xl my-5 border-b border-amber-200'>{title}</h1>
 
             <div className='flex lg:flex-row flex-col  lg:items-center justify-between gap-x-4'>
 
@@ -135,10 +143,11 @@ const ShipmentStatus = () => {
                 </div>
 
                 <div className='flex flex-row items-center gap-x-5 mt-2 lg:mt-0 '>
-                    <div className='w-full max-w-[300px] lg:min-w-[200px]'>
+                    { title == 'Logistics' &&
+                        <div className='w-full max-w-[300px] lg:min-w-[200px]'>
                         <label className="block text-sm font-semibold text-[#c7a44d]">Select</label>
                         <select
-                          value={searchTerm}
+                            value={searchTerm}
                             onChange={(e) => {
                                 setSearchTerm(e.target.value);
                                 if (e.target.value === '') {
@@ -152,6 +161,7 @@ const ShipmentStatus = () => {
                             <option value='IN TRANSIT'>IN TRANSIT</option>
                         </select>
                     </div>
+}
 
                     <div className='w-full max-w-[300px] lg:min-w-[200px]'>
                         <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>
@@ -176,4 +186,4 @@ const ShipmentStatus = () => {
     )
 }
 
-export default ShipmentStatus
+export default ShipmentViews
