@@ -3,18 +3,41 @@ import React, { useEffect, useState } from 'react'
 import { startOfDay, endOfDay, format } from 'date-fns';
 import apiservice from '@/app/apiservices/bmcServices/page';
 import Card from '@/components/Card';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+
+const today = format(new Date(), 'yyyy-MM-dd')
 
 const BmcSummary = () => {
-  const today = new Date();
   const router = useRouter();
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
 
-  const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
-  const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
+  const [fromDate, setFromDate] = useState(today)
+  const [toDate, setToDate] = useState(today)
+
   const [bmcSummary, setBmcSummary] = useState([])
   const [notPushedToVurdhi, setNotPushedToVurdhi] = useState([])
-  const [missingRefno, setMissingRefno] = useState([])
   const [typePayments, setTypePayments] = useState([])
+
+  /* 1. Restore state FROM URL when page loads / comes back */
+  useEffect(() => {
+    const urlFrom = searchParams.get('fromDate')
+    const urlTo = searchParams.get('toDate')
+
+    if (urlFrom && urlTo) {
+      setFromDate(urlFrom)
+      setToDate(urlTo)
+    }
+  }, [])
+
+  /*  2. Sync state TO URL + fetch data */
+  useEffect(() => {
+    router.replace(`${pathname}?fromDate=${fromDate}&toDate=${toDate}`,{ scroll: false })
+
+    fetchBmcSummary()
+    fetchNotPushedToVurdhi()
+    fetchTypePayments()
+  }, [fromDate, toDate])
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -38,16 +61,7 @@ const BmcSummary = () => {
   const fetchNotPushedToVurdhi = async () => {
     try {
       const data = await apiservice?.getNotPushedToVurdhi(fromDate, toDate);
-       setNotPushedToVurdhi(data)
-    } catch (err) {
-      throw new Error(err)
-    }
-  }
-
-  const fetchMissingRefNo = async () => {
-    try {
-      const data = await apiservice?.getMissingRefNo(fromDate, toDate);
-      setMissingRefno(data)
+      setNotPushedToVurdhi(data)
     } catch (err) {
       throw new Error(err)
     }
@@ -61,13 +75,6 @@ const BmcSummary = () => {
       throw new Error(err)
     }
   }
-
-  useEffect(() => {
-    fetchBmcSummary()
-    fetchNotPushedToVurdhi()
-    fetchMissingRefNo()
-    fetchTypePayments()
-  }, [fromDate, toDate])
 
   return (
     <div className="min-h-screen">
@@ -98,16 +105,16 @@ const BmcSummary = () => {
         </div>
       </div>
 
-      <p className='text-lg text-[#8a5a20] font-semibold mb-2'>Latest Tranzactions</p>
+      <p className='text-lg text-[#8a5a20] font-semibold mb-2'>Latest Transactions</p>
       <div className=' grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3  grid-cols-1 gap-5'>
         <div>
           <Card
-            title="Overall Tranzaction"
+            title="Overall Transactions"
             count={bmcSummary?.overallTxn?.TotalCount}
             amount={bmcSummary?.overallTxn?.TxnAmt}
             onView={() => {
               router.push(
-                `/bmc/${encodeURIComponent('Overall Tranzaction')}?filterType=overalltxn&fromDate=${fromDate}&toDate=${toDate}`
+                `/bmc/${encodeURIComponent('Overall Transactions')}?filterType=overalltxn&fromDate=${fromDate}&toDate=${toDate}`
               );
             }}
           />
@@ -115,7 +122,7 @@ const BmcSummary = () => {
         <div>
           <Card
             title="Payment Recieved"
-             count={bmcSummary?.summary?.TotalCount}
+            count={bmcSummary?.summary?.TotalCount}
             amount={bmcSummary?.summary?.TxnAmt}
             onView={() => {
               router.push(
@@ -167,7 +174,7 @@ const BmcSummary = () => {
         <div>
           <Card
             title="EMI Amount"
-              count={typePayments?.EmiAmount?.TotalCount}
+            count={typePayments?.EmiAmount?.TotalCount}
             amount={typePayments?.EmiAmount?.EAmount}
             onView={() => {
               router.push(
@@ -179,12 +186,12 @@ const BmcSummary = () => {
 
         <div>
           <Card
-            title="New Enrollment Amount"
+            title="Enrollment Amount"
             count={typePayments?.newMemberAmt?.TotalCount}
             amount={typePayments?.newMemberAmt?.NAmount}
             onView={() => {
               router.push(
-                `/bmc/${encodeURIComponent('New Enrollment Amount')}?filterType=newmember&fromDate=${fromDate}&toDate=${toDate}`
+                `/bmc/${encodeURIComponent('Enrollment Amount')}?filterType=newmember&fromDate=${fromDate}&toDate=${toDate}`
               );
             }}
           />
@@ -192,7 +199,7 @@ const BmcSummary = () => {
       </div>
 
       <div className='my-5'>
-        <p className='text-lg font-semibold mb-2 text-[#8a5a20] '>Previous Tranzactions</p>
+        <p className='text-lg font-semibold mb-2 text-[#8a5a20] '>Previous Transactions</p>
         <div className='grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3  grid-cols-1 gap-5'>
           <Card
             title="Not Pushed To Vurdhi"

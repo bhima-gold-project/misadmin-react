@@ -3,15 +3,34 @@ import { startOfDay, endOfDay, format } from 'date-fns';
 import ShipmentCard from '@/components/ShipmentCard'
 import React, { useEffect, useState } from 'react'
 import shipmentService from '@/app/apiservices/shipmentService/page';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
+const today = format(new Date(), 'yyyy-MM-dd')
 
 const ShipmentSummary = () => {
+   const router = useRouter();
+   const searchParams = useSearchParams()
+   const pathname = usePathname()
+ 
+   const [fromDate, setFromDate] = useState(today)
+   const [toDate, setToDate] = useState(today)
+   const [summary, setSummary] = useState([])
 
-  const router = useRouter();
-  const today = new Date();
-  const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
-  const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
-  const [summary, setSummary] = useState([])
+  /* 1. Restore state FROM URL when page loads / comes back */
+    useEffect(() => {
+      const urlFrom = searchParams.get('fromDate')
+      const urlTo = searchParams.get('toDate')
+      if (urlFrom && urlTo) {
+        setFromDate(urlFrom)
+        setToDate(urlTo)
+      }
+    }, [])
+  
+    /*  2. Sync state TO URL + fetch data */
+    useEffect(() => {
+      router.replace(`${pathname}?fromDate=${fromDate}&toDate=${toDate}`,{ scroll: false })
+        shipmentSummary()
+    }, [fromDate, toDate])
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -31,10 +50,6 @@ const ShipmentSummary = () => {
       throw new Error(err)
     }
   }
-
-  useEffect(() => {
-    shipmentSummary()
-  }, [fromDate, toDate])
 
   return (
     <div className="min-h-screen">

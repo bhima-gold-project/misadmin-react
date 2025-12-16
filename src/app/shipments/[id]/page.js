@@ -115,7 +115,7 @@ const ShipmentViews = () => {
     return (
         <div className="min-h-screen">
             <div className='relative'>
-                <p onClick={() => router.push('/shipments')} className='my-2 font-semibold text-[#c7a44d] absolute left-0 cursor-pointer text-sm flex items-center'><IoIosArrowBack /> Go Back</p>
+                <p onClick={() => router.back()} className='my-2 font-semibold text-[#c7a44d] absolute left-0 cursor-pointer text-sm flex items-center'><IoIosArrowBack /> Go Back</p>
                 <h1 className='text-center text-2xl mb-3 border-b border-amber-200 text-[#c7a44d]'>{title}</h1>
             </div>
 
