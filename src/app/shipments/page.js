@@ -38,10 +38,10 @@ const ShipmentSummary = () => {
 
   return (
     <div className="min-h-screen">
-      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Shippment Summary</h1>
+      <h1 className='text-center text-2xl mb-3  border-b border-amber-200'>Shippment Summary</h1>
       <div className="flex gap-4 items-center ">
         <div className=" max-w-[200px] w-full">
-          <label className="block text-sm font-semibold text-[#c7a44d] ">
+          <label className="block text-sm font-semibold text-[#8a5a20]">
             From Date
           </label>
           <input
@@ -53,7 +53,7 @@ const ShipmentSummary = () => {
         </div>
 
         <div className=" max-w-[200px] w-full">
-          <label className="block text-sm font-semibold  text-[#c7a44d]">
+          <label className="block text-sm font-semibold  text-[#8a5a20]">
             To Date
           </label>
           <input

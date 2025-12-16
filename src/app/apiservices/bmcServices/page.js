@@ -20,10 +20,10 @@ const getBmcSummary = async (fromDate, toDate) => {
   }
 }
 
-const getDuplicateRefNo = async (fromDate, toDate) => {
+const getNotPushedToVurdhi = async (fromDate, toDate) => {
   try {
     const token = localStorage.getItem('mistoken')
-    const response = await axios.post(`${BASE_URL}/api/duplicateRefNo?fromDate=${fromDate}&toDate=${toDate}`, {},
+    const response = await axios.post(`${BASE_URL}/api/notPushedTovurdhi?fromDate=${fromDate}&toDate=${toDate}`, {},
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -105,4 +105,25 @@ const getTypePaymentDetails = async (fromDate, toDate) => {
   }
 }
 
-export default { getBmcSummary, getDuplicateRefNo, getBmcReportDetails, getMissingRefNo, getTypePaymentDetails, getPortalTxnByFilter }
+
+const getTypeFilters = async (fromDate, toDate,type) => {
+  try {
+    const token = localStorage.getItem('mistoken')
+    const response = await axios.post(`${BASE_URL}/api/typeFilter?fromDate=${fromDate}&toDate=${toDate}&type=${type}`, {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      }
+    )
+    return response?.data?.data
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+export default { 
+  getBmcSummary, getNotPushedToVurdhi, getBmcReportDetails, getMissingRefNo,
+   getTypePaymentDetails, getPortalTxnByFilter ,getTypeFilters
+  }

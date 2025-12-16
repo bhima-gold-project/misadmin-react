@@ -61,7 +61,7 @@ const ProductAttrsUpdate = () => {
 
     return (
         <div className="min-h-screen">
-            <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Product Attrs Update</h1>
+            <h1 className='text-center text-2xl mb-3 border-b border-amber-200'>Product Attrs Update</h1>
 
             <div className="w-full grid max-w-sm mx-auto mt-10">
                 <div className="bg-white shadow-lg border border-gray-200 rounded-xl p-6">

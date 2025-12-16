@@ -88,12 +88,12 @@ const ReportSg = () => {
 
   return (
     <div className="min-h-screen">
-      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Report-SG</h1>
+      <h1 className='text-center text-2xl mb-3 border-b border-amber-200'>Report-SG</h1>
       <div className='flex flex-col xl:flex-row xl:justify-between xl:items-center lg:flex-row lg:items-center lg:justify-between 
       md:flex-row md:items-center md:justify-between gap-x-4'>
         <div className="flex gap-4 items-center  ">
           <div className=" max-w-[300px] w-full">
-            <label className="block text-sm font-semibold text-[#c7a44d] ">
+            <label className="block text-sm font-semibold text-[#8a5a20]">
               From Date
             </label>
             <input
@@ -105,7 +105,7 @@ const ReportSg = () => {
           </div>
 
           <div className=" max-w-[300px] w-full">
-            <label className="block text-sm font-semibold  text-[#c7a44d]">
+            <label className="block text-sm font-semibold  text-[#8a5a20]">
               To Date
             </label>
             <input

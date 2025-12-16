@@ -12,7 +12,7 @@ const BmcSummary = () => {
   const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
   const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
   const [bmcSummary, setBmcSummary] = useState([])
-  const [duplicateRefno, setDuplicateRefno] = useState([])
+  const [notPushedToVurdhi, setNotPushedToVurdhi] = useState([])
   const [missingRefno, setMissingRefno] = useState([])
   const [typePayments, setTypePayments] = useState([])
 
@@ -35,10 +35,10 @@ const BmcSummary = () => {
     }
   }
 
-  const fetchDuplicateRefNo = async () => {
+  const fetchNotPushedToVurdhi = async () => {
     try {
-      const data = await apiservice?.getDuplicateRefNo(fromDate, toDate);
-      setDuplicateRefno(data)
+      const data = await apiservice?.getNotPushedToVurdhi(fromDate, toDate);
+       setNotPushedToVurdhi(data)
     } catch (err) {
       throw new Error(err)
     }
@@ -64,17 +64,17 @@ const BmcSummary = () => {
 
   useEffect(() => {
     fetchBmcSummary()
-    fetchDuplicateRefNo()
+    fetchNotPushedToVurdhi()
     fetchMissingRefNo()
     fetchTypePayments()
   }, [fromDate, toDate])
 
   return (
     <div className="min-h-screen">
-      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>BMC Summary</h1>
-      <div className="flex gap-4 items-center ">
+      <h1 className='text-center text-2xl mb-3 border-b border-amber-200'>BMC Payment Summary</h1>
+      <div className="flex gap-4 items-center mb-5">
         <div className=" max-w-[200px] w-full">
-          <label className="block text-sm font-semibold text-[#c7a44d] ">
+          <label className="block text-sm font-semibold text-[#8a5a20]  ">
             From Date
           </label>
           <input
@@ -86,7 +86,7 @@ const BmcSummary = () => {
         </div>
 
         <div className=" max-w-[200px] w-full">
-          <label className="block text-sm font-semibold  text-[#c7a44d]">
+          <label className="block text-sm font-semibold  text-[#8a5a20] ">
             To Date
           </label>
           <input
@@ -97,14 +97,17 @@ const BmcSummary = () => {
           />
         </div>
       </div>
-      <div className='my-5 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 pb-10 grid-cols-1 gap-5'>
-       <div>
+
+      <p className='text-lg text-[#8a5a20] font-semibold mb-2'>Latest Tranzactions</p>
+      <div className=' grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3  grid-cols-1 gap-5'>
+        <div>
           <Card
-            title="Overall Transaction"
+            title="Overall Tranzaction"
+            count={bmcSummary?.overallTxn?.TotalCount}
             amount={bmcSummary?.overallTxn?.TxnAmt}
             onView={() => {
               router.push(
-                `/bmc/${encodeURIComponent('Overall Transaction')}?filterType=overalltxn&fromDate=${fromDate}&toDate=${toDate}`
+                `/bmc/${encodeURIComponent('Overall Tranzaction')}?filterType=overalltxn&fromDate=${fromDate}&toDate=${toDate}`
               );
             }}
           />
@@ -112,6 +115,7 @@ const BmcSummary = () => {
         <div>
           <Card
             title="Payment Recieved"
+             count={bmcSummary?.summary?.TotalCount}
             amount={bmcSummary?.summary?.TxnAmt}
             onView={() => {
               router.push(
@@ -124,6 +128,7 @@ const BmcSummary = () => {
         <div>
           <Card
             title="Pushed To Vurdhi"
+            count={bmcSummary?.pushedtovurdhi?.TotalCount}
             amount={bmcSummary?.pushedtovurdhi?.TxnAmt}
             onView={() => {
               router.push(
@@ -136,7 +141,8 @@ const BmcSummary = () => {
         <div>
           <Card
             title="Not Pushed To Vurdhi"
-            amount={duplicateRefno?.notpushed?.TxnAmt}
+            count={notPushedToVurdhi?.notpushed?.TotalCount}
+            amount={notPushedToVurdhi?.notpushed?.TxnAmt}
             onView={() => {
               router.push(
                 `/bmc/${encodeURIComponent('Not Pushed To Vurdhi')}?filterType=notPushedToVurdhi&fromDate=${fromDate}&toDate=${toDate}`
@@ -148,7 +154,8 @@ const BmcSummary = () => {
         <div>
           <Card
             title="Refunded Amount"
-            amount={duplicateRefno?.duplicateRefno?.TxnAmt}
+            count={notPushedToVurdhi?.duplicateRefno?.TotalCount}
+            amount={notPushedToVurdhi?.duplicateRefno?.TxnAmt}
             onView={() => {
               router.push(
                 `/bmc/${encodeURIComponent('Refunded Amount')}?filterType=duplicatePayment&fromDate=${fromDate}&toDate=${toDate}`
@@ -157,29 +164,47 @@ const BmcSummary = () => {
           />
         </div>
 
-       <div>
+        <div>
           <Card
-            title="EMI Transaction"
+            title="EMI Amount"
+              count={typePayments?.EmiAmount?.TotalCount}
             amount={typePayments?.EmiAmount?.EAmount}
             onView={() => {
               router.push(
-                `/bmc/${encodeURIComponent('EMI Transaction')}?filterType=emi&fromDate=${fromDate}&toDate=${toDate}`
+                `/bmc/${encodeURIComponent('EMI Amount')}?filterType=emi&fromDate=${fromDate}&toDate=${toDate}`
               );
             }}
           />
         </div>
 
-         <div>
-            <Card
-              title="New Member Transaction"
-              amount={typePayments?.newMemberAmt?.NAmount}
-              onView={() => {
-                router.push(
-                  `/bmc/${encodeURIComponent('New Member Transaction')}?filterType=newmember&fromDate=${fromDate}&toDate=${toDate}`
-                );
-              }}
-            />
-        </div>     
+        <div>
+          <Card
+            title="New Enrollment Amount"
+            count={typePayments?.newMemberAmt?.TotalCount}
+            amount={typePayments?.newMemberAmt?.NAmount}
+            onView={() => {
+              router.push(
+                `/bmc/${encodeURIComponent('New Enrollment Amount')}?filterType=newmember&fromDate=${fromDate}&toDate=${toDate}`
+              );
+            }}
+          />
+        </div>
+      </div>
+
+      <div className='my-5'>
+        <p className='text-lg font-semibold mb-2 text-[#8a5a20] '>Previous Tranzactions</p>
+        <div className='grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3  grid-cols-1 gap-5'>
+          <Card
+            title="Not Pushed To Vurdhi"
+            count={notPushedToVurdhi?.previousNotPushed?.TotalCount}
+            amount={notPushedToVurdhi?.previousNotPushed?.TxnAmt}
+            onView={() => {
+              router.push(
+                `/bmc/${encodeURIComponent('Not Pushed To Vurdhi')}?filterType=previousNotPushed&fromDate=${fromDate}&toDate=${toDate}`
+              );
+            }}
+          />
+        </div>
       </div>
     </div>
   )

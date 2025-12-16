@@ -143,7 +143,7 @@ const ProductImport = () => {
     return (
         <div className="font-sans h-screen" >
             <div className='pb-20 lg:pb-10'>
-                <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Product Import</h1>
+                <h1 className='text-center text-2xl mb-3 border-b border-amber-200'>Product Import</h1>
                 <div className="mx-auto mt-15 bg-white/90 grid gap-y-6 p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.2)] border border-[#d4af37] m-4  max-w-md w-full">
                     <p className='text-center'>Choose file to import.</p>
 

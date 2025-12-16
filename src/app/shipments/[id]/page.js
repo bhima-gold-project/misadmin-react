@@ -9,10 +9,12 @@ import { setDeliveryStatusData } from '../../../redux/slice';
 import { useDispatch } from 'react-redux';
 import ShipmentStatusReport from '@/components/ShipmentStatusReport';
 import Loader from '@/components/Loader';
-import { useParams, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { IoIosArrowBack } from "react-icons/io";
 
 const ShipmentViews = () => {
     const searchParam = useSearchParams()
+      const router = useRouter()
     const { id } = useParams()
     const title = decodeURIComponent(id);
     const dispatch = useDispatch();
@@ -112,13 +114,16 @@ const ShipmentViews = () => {
 
     return (
         <div className="min-h-screen">
-            <h1 className='text-center text-2xl my-5 border-b border-amber-200'>{title}</h1>
+            <div className='relative'>
+                <p onClick={() => router.push('/shipments')} className='my-2 font-semibold text-[#c7a44d] absolute left-0 cursor-pointer text-sm flex items-center'><IoIosArrowBack /> Go Back</p>
+                <h1 className='text-center text-2xl mb-3 border-b border-amber-200 text-[#c7a44d]'>{title}</h1>
+            </div>
 
             <div className='flex lg:flex-row flex-col  lg:items-center justify-between gap-x-4'>
 
                 <div className="flex gap-4 items-center ">
                     <div className=" max-w-[300px] w-full">
-                        <label className="block text-sm font-semibold text-[#c7a44d] ">
+                        <label className="block text-sm font-semibold text-[#8a5a20]">
                             From Date
                         </label>
                         <input
@@ -130,7 +135,7 @@ const ShipmentViews = () => {
                     </div>
 
                     <div className=" max-w-[300px] w-full">
-                        <label className="block text-sm font-semibold  text-[#c7a44d]">
+                        <label className="block text-sm font-semibold  text-[#8a5a20]">
                             To Date
                         </label>
                         <input
@@ -143,25 +148,25 @@ const ShipmentViews = () => {
                 </div>
 
                 <div className='flex flex-row items-center gap-x-5 mt-2 lg:mt-0 '>
-                    { title == 'Logistics' &&
+                    {title == 'Logistics' &&
                         <div className='w-full max-w-[300px] lg:min-w-[200px]'>
-                        <label className="block text-sm font-semibold text-[#c7a44d]">Select</label>
-                        <select
-                            value={searchTerm}
-                            onChange={(e) => {
-                                setSearchTerm(e.target.value);
-                                if (e.target.value === '') {
-                                    getShipmentStatus()
-                                }
-                            }}
-                            className='border-2 border-amber-300 p-1 text-gray-500 text-sm  outline-amber-200 rounded w-full'
-                        >
-                            <option value=''>Select All</option>
-                            <option value='DELIVERED'>DELIVERED</option>
-                            <option value='IN TRANSIT'>IN TRANSIT</option>
-                        </select>
-                    </div>
-}
+                            <label className="block text-sm font-semibold text-[#c7a44d]">Select</label>
+                            <select
+                                value={searchTerm}
+                                onChange={(e) => {
+                                    setSearchTerm(e.target.value);
+                                    if (e.target.value === '') {
+                                        getShipmentStatus()
+                                    }
+                                }}
+                                className='border-2 border-amber-300 p-1 text-gray-500 text-sm  outline-amber-200 rounded w-full'
+                            >
+                                <option value=''>Select All</option>
+                                <option value='DELIVERED'>DELIVERED</option>
+                                <option value='IN TRANSIT'>IN TRANSIT</option>
+                            </select>
+                        </div>
+                    }
 
                     <div className='w-full max-w-[300px] lg:min-w-[200px]'>
                         <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>

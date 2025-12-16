@@ -32,7 +32,7 @@ const DateRangePickerPopup = () => {
   return (
     <div className="flex gap-4 items-center ">
       <div className=" max-w-[300px] w-full">
-        <label className="block text-sm font-semibold text-[#c7a44d] ">
+        <label className="block text-sm font-semibold text-[#8a5a20]">
           From Date
         </label>
         <input
@@ -44,7 +44,7 @@ const DateRangePickerPopup = () => {
       </div>
 
     <div className=" max-w-[300px] w-full">
-        <label className="block text-sm font-semibold text-[#c7a44d]">
+        <label className="block text-sm font-semibold text-[#8a5a20]">
           To Date
         </label>
         <input
