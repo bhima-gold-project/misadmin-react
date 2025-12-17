@@ -38,7 +38,7 @@ const Login = () => {
         toast.success(result?.message);
         router.push('/');
       } else {
-        toast.error('Something went wrong!');
+        toast.error(result?.message);
       }
     } catch (err) {
       toast.error(err?.response?.data?.message);

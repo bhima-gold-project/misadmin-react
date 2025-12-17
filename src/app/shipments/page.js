@@ -111,8 +111,6 @@ const ShipmentSummary = () => {
             )
           })
         }
-
-
       </div>
     </div>
   )
